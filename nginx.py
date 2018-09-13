@@ -12,10 +12,23 @@ archive_editor_htpasswd = 'archive_editor.htpasswd'
 def generate_configuration(root, stream):
 	i = indent.Indenter(stream)
 
-	i.line('events {{}}')
+	i.line('worker_processes 1;')
+	i.line()
+
+	i.begin('events {{')
+	i.line('worker_connections 1024;')
+	i.end('}}')
 	i.line()
 
 	i.begin('http {{')
+	i.line('include mime.types;')
+	i.line('default_type application/octet-stream;')
+	i.line()
+	i.line('sendfile on;')
+	i.line('#tcp_nopush on;')
+	i.line('keepalive_timeout 60;')
+	i.line('#gzip on;')
+	i.line()
 
 	i.begin('server {{')
 	i.line('listen 80;')
