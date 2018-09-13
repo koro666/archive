@@ -31,7 +31,8 @@ rid_bits_state = 32
 rid_bits_noise = 31
 
 # Other
-administrators = ['admin']
+browse_users = ['guest']
+editor_users = ['editor']
 
 theme = 'united'
 theme_alt_navbar = False

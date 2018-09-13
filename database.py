@@ -4,10 +4,10 @@ import sqlite3
 import common
 import configuration
 
-database_file = os.path.join(configuration.database_directory, 'state.sqlite')
+database_path = os.path.join(configuration.database_directory, 'state.sqlite')
 
 def open_database():
-	db = sqlite3.connect(database_file)
+	db = sqlite3.connect(database_path)
 
 	db.execute("PRAGMA journal_mode = WAL")
 	with db:
