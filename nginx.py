@@ -41,7 +41,7 @@ def generate_configuration(root, stream):
 	i.line()
 
 	i.begin('location {0} {{', configuration.editor_prefix)
-	i.line('auth_basic "Archive Editor";')
+	i.line('auth_basic "{0} Editor";', configuration.name)
 	i.line('auth_basic_user_file {0};', os.path.join(root, archive_editor_htpasswd))
 	i.line()
 	i.line('fastcgi_pass unix:{0};', common.socket_path)
@@ -51,7 +51,7 @@ def generate_configuration(root, stream):
 	i.line()
 
 	i.begin('location {0} {{', configuration.browse_prefix)
-	i.line('auth_basic "Archive";')
+	i.line('auth_basic "{0}";', configuration.name)
 	i.line('auth_basic_user_file {0};', os.path.join(root, archive_htpasswd))
 	i.line()
 	i.line('fastcgi_pass unix:{0};', common.socket_path)
