@@ -32,11 +32,9 @@ exported_directories = {
 
 # Random IDs
 rid_seed = 12345
+rid_python2_random = False
 
-rid_symbols = []
-rid_symbols.extend(range(0x30, 0x3A))
-rid_symbols.extend(range(0x41, 0x5B))
-rid_symbols.extend(range(0x61, 0x7B))
+rid_symbols = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 
 rid_bits_state = 32
 rid_bits_noise = 31
