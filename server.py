@@ -8,6 +8,11 @@ import common
 import configuration
 import page
 
+from editor import handler as editor_handler
+from gallery import handler as gallery_handler
+from download import handler as download_handler
+from thumbnail import handler as thumbnail_handler
+
 status_map = {
 	200 : 'OK',
 	303 : 'See Other',
@@ -17,9 +22,9 @@ status_map = {
 	500 : 'Internal Server Error'
 }
 
-def gzip_wrapper(environ, writer, handler):
+def gzip_wrapper(environ, writer, parameter, handler):
 	with gzip.GzipFile(fileobj=writer, mode='wb') as gzwriter:
-		result = handler(environ, gzwriter)
+		result = handler(environ, gzwriter, parameter)
 	result[1].append(('Content-Encoding', 'gzip'))
 	return result
 
@@ -29,7 +34,10 @@ def default_handler(environ, writer, parameter):
 Module = collections.namedtuple('Module', ['prefix', 'handler', 'gzip'])
 
 module_map = {
-	# TODO:
+	'editor': Module(configuration.editor_prefix, editor_handler, False),
+	'gallery': Module(configuration.browse_prefix, gallery_handler, True),
+	'download': Module(configuration.download_prefix, download_handler, False),
+	'thumbnail': Module(configuration.thumbnail_prefix, thumbnail_handler, False)
 }
 
 default_module = Module('', default_handler, False)
