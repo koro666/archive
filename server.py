@@ -39,7 +39,11 @@ socket_path = os.path.join(configuration.socket_directory, 'archive2.socket')
 def dispatcher(environ, start_response):
 	with io.BytesIO() as writer:
 		module = module_map.get(environ.get('archive.module'), default_module)
-		parameter = '';
+
+		parameter = environ['DOCUMENT_URI'];
+		if parameter.startswith(module.prefix):
+			parameter = parameter[len(module.prefix):]
+
 		if module.gzip:
 			result = gzip_wrapper(environ, writer, parameter, module.handler)
 		else:

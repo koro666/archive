@@ -47,6 +47,7 @@ def generate_configuration(root, stream):
 	i.line('fastcgi_pass unix:{0};', common.socket_path)
 	i.line('include fastcgi_params;')
 	i.line('fastcgi_param REMOTE_USER $remote_user;')
+	i.line('fastcgi_param archive.module editor;')
 	i.end('}}')
 	i.line()
 
@@ -57,12 +58,14 @@ def generate_configuration(root, stream):
 	i.line('fastcgi_pass unix:{0};', common.socket_path)
 	i.line('include fastcgi_params;')
 	i.line('fastcgi_param REMOTE_USER $remote_user;')
+	i.line('fastcgi_param archive.module gallery;')
 	i.end('}}')
 	i.line()
 
 	i.begin('location {0} {{', configuration.download_prefix)
 	i.line('fastcgi_pass unix:{0};', common.socket_path)
 	i.line('include fastcgi_params;')
+	i.line('fastcgi_param archive.module download;')
 	i.end('}}')
 	i.line()
 
@@ -79,6 +82,7 @@ def generate_configuration(root, stream):
 	i.begin('location {0} {{', configuration.thumbnail_prefix)
 	i.line('fastcgi_pass unix:{0};', common.socket_path)
 	i.line('include fastcgi_params;')
+	i.line('fastcgi_param archive.module thumbnail;')
 	i.end('}}')
 	i.line()
 
