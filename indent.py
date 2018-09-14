@@ -1,6 +1,4 @@
 #!/usr/bin/env python3.7
-import cgi
-
 class Indenter:
 	def __init__(self, stream, transform=None):
 		self.stream = stream
@@ -29,7 +27,3 @@ class Indenter:
 
 	def _write_nl(self):
 		self.stream.write('\n')
-
-def HtmlIndenter(stream):
-	return Indenter(stream, lambda x: cgi.escape(x, quote=True))
-

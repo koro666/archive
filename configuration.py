@@ -2,6 +2,7 @@
 
 # Global
 name = 'Archive'
+debug = False
 
 theme = 'united'
 theme_inverse_navbar = False
