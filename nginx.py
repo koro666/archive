@@ -36,7 +36,7 @@ def generate_configuration(root, stream):
 	i.line()
 
 	i.begin('location {0} {{', configuration.static_prefix)
-	i.line('alias {0};', configuration.static_directory)
+	i.line('alias {0}/;', configuration.static_directory)
 	i.end('}}')
 	i.line()
 
@@ -72,7 +72,7 @@ def generate_configuration(root, stream):
 	i.begin('location {0} {{', configuration.download_internal_prefix)
 	for kvp in configuration.exported_directories.items():
 		i.begin('location {0}{1}/ {{', configuration.download_internal_prefix, kvp[0])
-		i.line('alias {0};', kvp[1])
+		i.line('alias {0}/;', kvp[1])
 		i.end('}}')
 		i.line()
 	i.line('internal;')
@@ -87,7 +87,7 @@ def generate_configuration(root, stream):
 	i.line()
 
 	i.begin('location {0} {{', configuration.thumbnail_cache_prefix)
-	i.line('alias {0};', configuration.thumbnail_cache_directory)
+	i.line('alias {0}/;', configuration.thumbnail_cache_directory)
 	i.end('}}')
 	i.line()
 

@@ -46,13 +46,27 @@ def uri_to_url(environ, uri):
 	return format.format(scheme, host, port, uri)
 
 def make_content_disposition_header(filename, extension='', inline=True):
-	return ('Content-Disposition', '{0}; filename*=UTF-8\'\'{1}'.format('inline' if inline else 'attachment', urllib.parse.quote(filename, encoding='utf-8', errors='ignore')))
+	return ('Content-Disposition', '{0}; filename*=UTF-8\'\'{1}'.format('inline' if inline else 'attachment', urllib.parse.quote(filename, encoding='utf-8', errors='ignore')) + extension)
 
 def make_nocache_header():
 	return ('Cache-Control', 'no-cache, no-store, must-revalidate')
 
 def make_expires_header(expires):
 	return ('Expires', wsgiref.handlers.format_date_time(expires))
+
+def make_tag(tag, attributes):
+	format = [tag]
+	values = []
+
+	for attribute in attributes:
+		if attribute[1] == '':
+			continue
+
+		format.append('{0}="{{}}"'.format(attribute[0]))
+		values.append(attribute[1])
+
+	format = '<{0}>'.format(' '.join(format))
+	return [format] + values
 
 def render_page(environ, writer, code=200, headers=[], title=configuration.name, link_cb=None, navbar_cb=None, content_cb=None, script_cb=None):
 	theme = themes[configuration.theme]

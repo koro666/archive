@@ -11,7 +11,7 @@ def open_database():
 
 	db.execute("PRAGMA journal_mode = WAL")
 	with db:
-		db.execute("CREATE TABLE IF NOT EXISTS ids (id TEXT NOT NULL, expires INTEGER NOT NULL, user TEXT NOT NULL, download INTEGER NOT NULL, hits INTEGER NOT NULL, mount TEXT NOT NULL, path TEXT NOT NULL)")
+		db.execute("CREATE TABLE IF NOT EXISTS ids (id TEXT NOT NULL, expires INTEGER NOT NULL, user TEXT NULL, download INTEGER NOT NULL, hits INTEGER NOT NULL, mount TEXT NOT NULL, path TEXT NOT NULL)")
 		db.execute("CREATE UNIQUE INDEX IF NOT EXISTS ids_id_index ON ids (id ASC)")
 		db.execute("CREATE TABLE IF NOT EXISTS state (key TEXT NOT NULL, value)")
 		db.execute("CREATE UNIQUE INDEX IF NOT EXISTS state_key_index ON state (key ASC)")
