@@ -16,6 +16,12 @@ configuration.database_directory = os.path.normpath(os.path.abspath(configuratio
 configuration.socket_directory = os.path.normpath(os.path.abspath(configuration.socket_directory))
 configuration.thumbnail_cache_directory = os.path.normpath(os.path.abspath(configuration.thumbnail_cache_directory))
 
+for key, path in configuration.exported_directories.items():
+	configuration.exported_directories[key] = os.path.normpath(os.path.abspath(path))
+
+configuration.hidden_directory_names = set(configuration.hidden_directory_names)
+configuration.hidden_file_names = set(configuration.hidden_file_names)
+
 configuration.image_extensions = set(configuration.image_extensions)
 configuration.audio_extensions = set(configuration.audio_extensions)
 configuration.video_extensions = set(configuration.video_extensions)

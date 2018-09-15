@@ -42,8 +42,6 @@ module_map = {
 
 default_module = Module('', default_handler, False)
 
-socket_path = os.path.join(configuration.socket_directory, 'archive2.socket')
-
 def dispatcher(environ, start_response):
 	with io.BytesIO() as writer:
 		module = module_map.get(environ.get('archive.module'), default_module)
@@ -62,4 +60,4 @@ def dispatcher(environ, start_response):
 
 if __name__ == '__main__':
 	os.umask(0o002)
-	flup.server.fcgi.WSGIServer(dispatcher, bindAddress=socket_path, umask=0, debug=configuration.debug).run()
+	flup.server.fcgi.WSGIServer(dispatcher, bindAddress=common.socket_path, umask=0, debug=configuration.debug).run()

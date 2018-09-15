@@ -2,6 +2,8 @@
 import io
 import html
 import collections
+import urllib.parse
+import wsgiref
 import common
 import configuration
 import indent
@@ -30,6 +32,27 @@ themes = {
 
 def HtmlIndenter(stream):
 	return indent.Indenter(stream, html.escape)
+
+def uri_to_url(environ, uri):
+	assert(uri[0] == '/')
+
+	scheme = environ['wsgi.url_scheme']
+	host = environ['HTTP_HOST']
+	port = environ['SERVER_PORT']
+
+	port_visible = (scheme == 'http' and port != '80') or (scheme == 'https' and port != '443')
+	format = '{0}://{1}:{2}{3}' if port_visible else '{0}://{1}{3}'
+
+	return format.format(scheme, host, port, uri)
+
+def make_content_disposition_header(filename, extension='', inline=True):
+	return ('Content-Disposition', '{0}; filename*=UTF-8\'\'{1}'.format('inline' if inline else 'attachment', urllib.parse.quote(filename, encoding='utf-8', errors='ignore')))
+
+def make_nocache_header():
+	return ('Cache-Control', 'no-cache, no-store, must-revalidate')
+
+def make_expires_header(expires):
+	return ('Expires', wsgiref.handlers.format_date_time(expires))
 
 def render_page(environ, writer, code=200, headers=[], title=configuration.name, link_cb=None, navbar_cb=None, content_cb=None, script_cb=None):
 	theme = themes[configuration.theme]

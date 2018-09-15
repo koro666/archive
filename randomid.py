@@ -51,6 +51,9 @@ def peek_state(db):
 	return row[0] if row else 0
 
 def get_state_range_unlocked(db, count):
+	if not count:
+		return []
+
 	csr = db.cursor()
 	csr.execute('UPDATE state SET value = value + ? WHERE key = ?', (count, state_key))
 

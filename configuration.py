@@ -31,6 +31,9 @@ exported_directories = {
 	'example': '/mnt/other'
 }
 
+hidden_directory_names = ['$RECYCLE.BIN']
+hidden_file_names = ['desktop.ini', 'Thumbs.db']
+
 # Random IDs
 rid_seed = 12345
 rid_python2_random = False
@@ -45,5 +48,4 @@ image_extensions = [".bmp", ".gif", ".jpe", ".jpg", ".jpeg", ".png"]
 audio_extensions = [".aiff", ".flac", ".m4a", ".mp3", ".ogg", ".wav", ".wma"]
 video_extensions = [".3gp", ".asf", ".avi", ".f4v", ".flv", ".m4v", ".mkv", ".mov", ".mpg", ".mpeg", ".mp4", ".mts", ".ts", ".webm", ".wmv"]
 
-thumbnail_size = 128
 thumbnail_animated_framecount = 5
