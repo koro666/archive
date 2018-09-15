@@ -1,5 +1,4 @@
 #!/usr/bin/env python3.7
-import io
 import html
 import collections
 import urllib.parse
@@ -70,8 +69,7 @@ def make_tag(tag, attributes):
 
 def render_page(environ, writer, code=200, headers=[], title=configuration.name, link_cb=None, navbar_cb=None, content_cb=None, script_cb=None):
 	theme = themes[configuration.theme]
-	wrapper = io.TextIOWrapper(writer, encoding='utf-8', errors='replace')
-	h = HtmlIndenter(wrapper)
+	h = HtmlIndenter(writer)
 	h.line('<!doctype html>')
 	h.begin('<html lang="en">')
 	h.begin('<head>')
@@ -114,11 +112,10 @@ def render_page(environ, writer, code=200, headers=[], title=configuration.name,
 		script_cb(h)
 	h.end('</body>')
 	h.end('</html>')
-	wrapper.detach()
 
-	return (code, [("Content-Type", "text/html")] + headers)
+	return (code, [('Content-Type', 'text/html')] + headers)
 
 def render_error_page(environ, writer, code, message):
 	# TODO: Better error page
-	writer.write(message.encode('utf-8', errors='replace'))
-	return (code, [("Content-Type", "text/plain")])
+	writer.write(message)
+	return (code, [('Content-Type', 'text/plain')])

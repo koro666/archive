@@ -22,7 +22,17 @@ status_map = {
 	500 : 'Internal Server Error'
 }
 
-def gzip_wrapper(environ, writer, parameter, handler):
+def null_wrapper(handler, environ, writer, parameter):
+	return handler(environ, writer, parameter)
+
+def text_wrapper(handler, environ, writer, parameter):
+	wrapper = io.TextIOWrapper(writer, encoding='utf-8', errors='replace', write_through=True)
+	try:
+		return handler(environ, wrapper, parameter)
+	finally:
+		wrapper.detach()
+
+def gzip_wrapper(handler, environ, writer, parameter):
 	with gzip.GzipFile(fileobj=writer, mode='wb') as gzwriter:
 		result = handler(environ, gzwriter, parameter)
 	result[1].append(('Content-Encoding', 'gzip'))
@@ -31,16 +41,16 @@ def gzip_wrapper(environ, writer, parameter, handler):
 def default_handler(environ, writer, parameter):
 	return page.render_error_page(environ, writer, 404, 'No such module.')
 
-Module = collections.namedtuple('Module', ['prefix', 'handler', 'gzip'])
+Module = collections.namedtuple('Module', ['prefix', 'handler', 'text', 'gzip'])
 
 module_map = {
-	'editor': Module(configuration.editor_prefix, editor_handler, False),
-	'gallery': Module(configuration.browse_prefix, gallery_handler, True),
-	'download': Module(configuration.download_prefix, download_handler, False),
-	'thumbnail': Module(configuration.thumbnail_prefix, thumbnail_handler, False)
+	'editor': Module(configuration.editor_prefix, editor_handler, True, False),
+	'gallery': Module(configuration.browse_prefix, gallery_handler, True, True),
+	'download': Module(configuration.download_prefix, download_handler, True, False),
+	'thumbnail': Module(configuration.thumbnail_prefix, thumbnail_handler, True, False)
 }
 
-default_module = Module('', default_handler, False)
+default_module = Module('', default_handler, True, False)
 
 def dispatcher(environ, start_response):
 	with io.BytesIO() as writer:
@@ -50,11 +60,13 @@ def dispatcher(environ, start_response):
 		if parameter.startswith(module.prefix):
 			parameter = parameter[len(module.prefix):]
 
+		handler = lambda e,w,p: null_wrapper(module.handler, e, w, p)
+		if module.text:
+			handler = lambda e,w,p,h=handler: text_wrapper(h, e, w, p)
 		if module.gzip:
-			result = gzip_wrapper(environ, writer, parameter, module.handler)
-		else:
-			result = module.handler(environ, writer, parameter)
+			handler = lambda e,w,p,h=handler: gzip_wrapper(h, e, w, p)
 
+		result = handler(environ, writer, parameter)
 		start_response('{0} {1}'.format(result[0], status_map[result[0]]), result[1]);
 		return [writer.getvalue()]
 

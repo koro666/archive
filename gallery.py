@@ -1,6 +1,5 @@
 #!/usr/bin/env python3.7
 import os
-import io
 import time
 import json
 import urllib.parse
@@ -162,7 +161,7 @@ def scan_directory(mount_path, fs_path, user, is_editor):
 					raise Exception('Exhausted ID space.')
 
 				unique_id = randomid.make_id(state)
-				db.execute('INSERT INTO ids (id, expires, user, download, hits, mount, path) VALUES (?, ?, ?, ?, ?, ?, ?)', (unique_id, expires, user, 0, 0, mount_path[0], '{0}/{1}'.format(mount_path[0], raw_entry.name)))
+				db.execute('INSERT INTO ids (id, expires, user, download, hits, mount, path) VALUES (?, ?, ?, ?, ?, ?, ?)', (unique_id, expires, user, 0, 0, mount_path[0], '{0}/{1}'.format(mount_path[1], raw_entry.name) if mount_path[1] else raw.entry.name))
 
 				extension = os.path.splitext(raw_entry.name)[1].lower()
 				is_image = extension in configuration.image_extensions
@@ -200,38 +199,29 @@ def scan_directory(mount_path, fs_path, user, is_editor):
 	return result
 
 def subhandler_json(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
-	wrapper = io.TextIOWrapper(writer, encoding='utf-8', errors='replace')
-
 	if not is_editor:
 		for entry in directory:
 			entry.pop('fs_path', None)
 
-	json.dump(directory, wrapper, sort_keys=True)
+	json.dump(directory, writer, sort_keys=True)
 
-	wrapper.detach()
 	return (200, [('Content-Type', 'application/json'), page.make_nocache_header(), page.make_content_disposition_header(name, '.json')])
 
 def subhandler_playlist(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
-	wrapper = io.TextIOWrapper(writer, encoding='utf-8', errors='replace')
-
-	wrapper.write('\ufeff#EXTM3U\n')
+	writer.write('#EXTM3U\n')
 	for entry in directory:
 		if not entry['playable']:
 			continue
 
-		wrapper.write('#EXTINF:0,{0}\n'.format(entry['name']))
-		wrapper.write('{0}\n'.format(page.uri_to_url(environ, entry['uri'])))
+		writer.write('#EXTINF:0,{0}\n'.format(entry['name']))
+		writer.write('{0}\n'.format(page.uri_to_url(environ, entry['uri'])))
 
-	wrapper.detach()
 	return (200, [('Content-Type', 'application/vnd.apple.mpegurl'), page.make_nocache_header(), page.make_content_disposition_header(name, '.m3u8')])
 
 def subhandler_text(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
-	wrapper = io.TextIOWrapper(writer, encoding='utf-8', errors='replace')
-
 	for entry in directory:
-		wrapper.write('{0}\n'.format(page.uri_to_url(environ, entry['uri'])))
+		writer.write('{0}\n'.format(page.uri_to_url(environ, entry['uri'])))
 
-	wrapper.detach()
 	return (200, [('Content-Type', 'text/plain'), page.make_nocache_header(), page.make_content_disposition_header(name, '.txt')])
 
 def subhandler_html(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
@@ -517,13 +507,13 @@ def handler(environ, writer, parameter):
 
 	message = None
 	if fs_path:
-		directory = []
 		if configuration.debug:
 			directory = scan_directory(mount_path, fs_path, user, is_editor)
 		else:
 			try:
 				directory = scan_directory(mount_path, fs_path, user, is_editor)
 			except Exception as e:
+				directory = []
 				try:
 					message = '{0}.'.format(e.strerror)
 				except AttributeError:
