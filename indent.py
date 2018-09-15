@@ -13,7 +13,7 @@ class Indenter:
 		if text:
 			self._write_indent()
 			if self.transform:
-				self.stream.write(text.format(*map(transform, args)))
+				self.stream.write(text.format(*map(self.transform, args)))
 			else:
 				self.stream.write(text.format(*args))
 		self._write_nl()
