@@ -512,17 +512,11 @@ def handler(environ, writer, parameter):
 
 	message = None
 	if fs_path:
-		if configuration.debug:
+		try:
 			directory = scan_directory(mount_path, fs_path, user, is_editor)
-		else:
-			try:
-				directory = scan_directory(mount_path, fs_path, user, is_editor)
-			except Exception as e:
-				directory = []
-				try:
-					message = '{0}.'.format(e.strerror)
-				except AttributeError:
-					message = 'An error occured.'
+		except OSError as e:
+			directory = []
+			message = '{0}.'.format(e.strerror)
 	else:
 		directory = scan_root()
 
