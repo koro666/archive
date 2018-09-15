@@ -88,7 +88,7 @@ def scan_root():
 			'type': 'drive',
 			'hidden': False,
 			'size': size,
-			'uri': urllib.parse.quote(make_uri_from_mount_path((name, ''), None, True), encoding='utf-8', errors='replace'),
+			'uri': urllib.parse.quote(make_uri_from_mount_path((name, ''), None, True), encoding='utf-8', errors='surrogateescape'),
 			'icons': drive_icons,
 			'lazy': False,
 			'animate': False,
@@ -137,7 +137,7 @@ def scan_directory(mount_path, fs_path, user, is_editor):
 					'hidden': is_hidden_directory_name(raw_entry.name, is_editor),
 					'id': None,
 					'size': None,
-					'uri': urllib.parse.quote(make_uri_from_mount_path(mount_path, raw_entry.name, True), encoding='utf-8', errors='replace'),
+					'uri': urllib.parse.quote(make_uri_from_mount_path(mount_path, raw_entry.name, True), encoding='utf-8', errors='surrogateescape'),
 					'icons': directory_icons,
 					'lazy': False,
 					'animate': False,
@@ -161,7 +161,12 @@ def scan_directory(mount_path, fs_path, user, is_editor):
 					raise Exception('Exhausted ID space.')
 
 				unique_id = randomid.make_id(state)
-				db.execute('INSERT INTO ids (id, expires, user, download, hits, mount, path) VALUES (?, ?, ?, ?, ?, ?, ?)', (unique_id, expires, user, 0, 0, mount_path[0], '{0}/{1}'.format(mount_path[1], raw_entry.name) if mount_path[1] else raw.entry.name))
+				path_value = ('{0}/{1}'.format(mount_path[1], raw_entry.name) if mount_path[1] else raw_entry.name)
+				try:
+					path_value.encode('utf-8')
+				except UnicodeEncodeError:
+					path_value = path_value.encode('utf-8', errors='surrogateescape')
+				db.execute('INSERT INTO ids (id, expires, user, download, hits, mount, path) VALUES (?, ?, ?, ?, ?, ?, ?)', (unique_id, expires, user, 0, 0, mount_path[0], path_value))
 
 				extension = os.path.splitext(raw_entry.name)[1].lower()
 				is_image = extension in configuration.image_extensions

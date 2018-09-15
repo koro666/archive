@@ -48,7 +48,7 @@ thread_available = True
 
 if sys.hexversion >= 0x03000000:
     text_type = str
-    force_str = lambda s: s.decode('latin-1')
+    force_str = lambda s: s.decode('utf-8', errors='surrogateescape')
 else:
     text_type = unicode
     force_str = lambda s: s
@@ -566,7 +566,7 @@ class Request(object):
         try:
             protocolStatus, appStatus = self.server.handler(self)
         except:
-            self.stderr.write(traceback.format_exc().encode())
+            self.stderr.write(traceback.format_exc().encode('utf-8', errors='skip'))
             self.stderr.flush()
             if not self.stdout.dataWritten:
                 self.server.error(self)
@@ -1089,7 +1089,7 @@ class BaseFCGIServer(object):
                         pass
                 s = b'Status: ' + status + b'\r\n'
                 for header in responseHeaders:
-                    s += header[0].encode('ascii') + b': ' + header[1].encode('ascii') + b'\r\n'
+                    s += header[0].encode('utf-8', errors='surrogateescape') + b': ' + header[1].encode('utf-8', errors='surrogateescape') + b'\r\n'
                 s += b'\r\n'
                 req.stdout.write(s)
 
@@ -1109,7 +1109,7 @@ class BaseFCGIServer(object):
 
             assert isinstance(status, (bytes, text_type)), 'Status must be text or bytes'
             if isinstance(status, text_type):
-                status = status.encode('latin-1')
+                status = status.encode('utf-8')
             assert len(status) >= 4, 'Status must be at least 4 characters'
             assert int(status[:3]), 'Status must begin with 3-digit code'
             #assert status[3] == b' ', 'Status must have a space after code'
@@ -1185,7 +1185,7 @@ class BaseFCGIServer(object):
         if self.debug:
             import cgitb
             req.stdout.write(b'Content-Type: text/html\r\n\r\n' +
-                             cgitb.html(sys.exc_info()).encode('utf8'))
+                             cgitb.html(sys.exc_info()).encode('utf-8', errors='replace'))
         else:
             errorpage = b"""<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
