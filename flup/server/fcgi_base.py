@@ -566,7 +566,7 @@ class Request(object):
         try:
             protocolStatus, appStatus = self.server.handler(self)
         except:
-            traceback.print_exc(file=self.stderr)
+            self.stderr.write(traceback.format_exc().encode())
             self.stderr.flush()
             if not self.stdout.dataWritten:
                 self.server.error(self)
