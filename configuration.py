@@ -48,4 +48,8 @@ image_extensions = [".bmp", ".gif", ".jpe", ".jpg", ".jpeg", ".png"]
 audio_extensions = [".aiff", ".flac", ".m4a", ".mp3", ".ogg", ".wav", ".wma"]
 video_extensions = [".3gp", ".asf", ".avi", ".f4v", ".flv", ".m4v", ".mkv", ".mov", ".mpg", ".mpeg", ".mp4", ".mts", ".ts", ".webm", ".wmv"]
 
+thumbnail_nice = 20
+thumbnail_concurrent = 4
+thumbnail_filename_salt = b'changeme'
 thumbnail_animated_framecount = 5
+thumbnail_animated_framerate = 1.0

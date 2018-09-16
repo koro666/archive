@@ -47,7 +47,7 @@ module_map = {
 	'editor': Module(configuration.editor_prefix, editor_handler, True, False),
 	'gallery': Module(configuration.browse_prefix, gallery_handler, True, True),
 	'download': Module(configuration.download_prefix, download_handler, True, False),
-	'thumbnail': Module(configuration.thumbnail_prefix, thumbnail_handler, True, False)
+	'thumbnail': Module(configuration.thumbnail_prefix, thumbnail_handler, False, False)
 }
 
 default_module = Module('', default_handler, True, False)

@@ -4,6 +4,7 @@ import time
 import json
 import urllib.parse
 import http.cookies
+import traceback
 import common
 import configuration
 import database
@@ -515,6 +516,8 @@ def handler(environ, writer, parameter):
 		try:
 			directory = scan_directory(mount_path, fs_path, user, is_editor)
 		except OSError as e:
+			if configuration.debug:
+				traceback.print_exc()
 			directory = []
 			message = '{0}.'.format(e.strerror)
 	else:

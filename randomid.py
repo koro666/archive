@@ -94,6 +94,9 @@ def make_id(state):
 
 	return ''.join(result)
 
+def validate_id(id):
+	return len(id) == length and all(x in symbol_set for x in id)
+
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
 		count = int(sys.argv[1])
