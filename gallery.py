@@ -250,9 +250,11 @@ def subhandler_html(environ, writer, mount_path, fs_path, name, is_editor, direc
 		if not list_mode:
 			if theme_is_dark:
 				h.line('div.archive_thumbnail {{ background-image: url("{0}background-dark.svg"); }}', configuration.static_prefix)
+				h.line('div.archive_thumbnail:hover {{ filter: brightness(125%); }}')
 				h.line('div.archive_name {{ color: white; text-shadow: 0px 0px 4px black; }}')
 			else:
 				h.line('div.archive_thumbnail {{ background-image: url("{0}background-light.svg"); }}', configuration.static_prefix)
+				h.line('div.archive_thumbnail:hover {{ filter: brightness(90%); }}')
 				h.line('div.archive_name {{ color: black; text-shadow: 0px 0px 4px white; }}')
 		h.end('</style>')
 

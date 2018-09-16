@@ -26,11 +26,6 @@ div.archive_thumbnail
 	display: inline-block;
 }
 
-div.archive_thumbnail:hover
-{
-	filter: brightness(125%)
-}
-
 div.archive_thumbnail a
 {
 	display: table-cell;
