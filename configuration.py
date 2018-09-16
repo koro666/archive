@@ -53,3 +53,4 @@ thumbnail_concurrent = 4
 thumbnail_filename_salt = b'changeme'
 thumbnail_animated_framecount = 5
 thumbnail_animated_framerate = 1.0
+thumbnail_expire_days = 30
