@@ -23,6 +23,7 @@ swizzle.extend(range(0, bits_state))
 swizzle.extend([-1] * bits_noise)
 
 symbols = list(configuration.rid_symbols)
+symbol_set = set(symbols)
 
 if configuration.rid_python2_random:
 	generator.shuffle(symbols, random=generator.random)

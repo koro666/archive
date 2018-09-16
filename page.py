@@ -2,7 +2,7 @@
 import html
 import collections
 import urllib.parse
-import wsgiref
+import wsgiref.handlers
 import common
 import configuration
 import indent
