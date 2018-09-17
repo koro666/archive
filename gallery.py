@@ -2,6 +2,7 @@
 import os
 import time
 import json
+import shlex
 import urllib.parse
 import http.cookies
 import traceback
@@ -229,6 +230,18 @@ def subhandler_text(environ, writer, mount_path, fs_path, name, is_editor, direc
 		writer.write('{0}\n'.format(page.uri_to_url(environ, entry['uri'])))
 
 	return (200, [('Content-Type', 'text/plain'), page.make_nocache_header(), page.make_content_disposition_header(name, '.txt')])
+
+def subhandler_wget(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
+	writer.write('#!/bin/sh\n')
+	for entry in directory:
+		if entry['type'] != 'file':
+			continue
+
+		writer.write('\n')
+		writer.write('# {0}\n'.format(entry['name']))
+		writer.write('wget -c --content-disposition {0}\n'.format(shlex.quote(page.uri_to_url(environ, entry['uri']))))
+
+	return (200, [('Content-Type', 'application/x-sh'), page.make_nocache_header(), page.make_content_disposition_header(name, '.sh')])
 
 def subhandler_html(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
 	list_mode = False
@@ -492,6 +505,7 @@ subhandlers = {
 	'json': subhandler_json,
 	'm3u': subhandler_playlist,
 	'txt': subhandler_text,
+	'wget': subhandler_wget,
 	'html': subhandler_html
 }
 
