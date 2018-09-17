@@ -28,4 +28,4 @@ configuration.video_extensions = set(configuration.video_extensions)
 
 assert(sys.getfilesystemencoding() == 'utf-8')
 
-socket_path = os.path.join(configuration.socket_directory, 'archive2.socket')
+socket_path = os.path.join(configuration.socket_directory, 'archive.socket')

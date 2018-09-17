@@ -24,9 +24,9 @@ thumbnail_cache_prefix = '/thumbnail/cache/'
 
 # Directories
 static_directory = 'static'
-database_directory = '/var/db/archive2'
-socket_directory = '/var/run/archive2'
-thumbnail_cache_directory = '/var/cache/archive2/thumbnail'
+database_directory = '/var/db/archive'
+socket_directory = '/var/run/archive'
+thumbnail_cache_directory = '/var/cache/archive/thumbnail'
 
 exported_directories = {
 	'example': '/mnt/other'
