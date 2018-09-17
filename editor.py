@@ -145,7 +145,10 @@ def handler(environ, writer, parameter):
 				h.begin('<tr>')
 
 				if id['valid']:
-					h.line('<td><input type="checkbox" name="ids" value="{0}" checked style="margin: 0px 2px 0px 0px"> {0}</td>', id['id'])
+					h.begin('<td>')
+					h.line('<input type="checkbox" name="ids" value="{0}" checked style="margin: 0px 2px 0px 0px">', id['id'])
+					h.line('<a href="{0}{1}">{1}</a>', configuration.download_prefix, id['id'])
+					h.end('</td>')
 					h.line('<td class="hidden-xs hidden-sm">{0}</td>', str(id['hits']))
 					h.line('<td>{0}</td>', time.strftime(configuration.time_format, time.localtime(id['expires'])))
 					h.line('<td class="hidden-xs" style="font-size: 90%">{0}</td>', '{0}/{1}'.format(*id['mount_path']).replace('/', '/\u200b'))
