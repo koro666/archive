@@ -72,12 +72,12 @@ def fetch_update_ids(ids, delay=0, download=None):
 				if delay:
 					db.execute('UPDATE ids SET expires = MAX(0, expires + ?) WHERE id = ?', (delay, id))
 				if download is not None:
-					db.execute('UPDATE ids SET download = ? WHERE id = ?', (int(download),))
+					db.execute('UPDATE ids SET download = ? WHERE id = ?', (int(download), id))
 
 				in_expires, in_download, in_hits, in_mount, in_path = entry
 				del entry
 
-				in_expires += delay
+				in_expires = max(0, in_expires + delay)
 				if download is None:
 					in_download = bool(in_download)
 				else:
@@ -112,10 +112,15 @@ def handler(environ, writer, parameter):
 	def contents(h):
 		h.line('<h1>Link Editor</h1>')
 
-		if ids and delay:
+		if ids and (delay or download):
 			h.begin('<div class="alert alert-success alert-dismissable">')
 			h.line('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>')
-			h.line('The expiration time for the specified links has been updated.')
+			if delay and download:
+				h.line('The expiration time and disposition for the specified links have been updated.')
+			elif delay:
+				h.line('The expiration time for the specified links has been updated.')
+			elif download:
+				h.line('The disposition for the specified links has been updated.')
 			h.end('</div>')
 
 		if configuration.debug:
@@ -141,17 +146,25 @@ def handler(environ, writer, parameter):
 			h.end('</thead>')
 			h.begin('<tbody>')
 
+			now = int(time.time())
 			for id in ids:
 				h.begin('<tr>')
 
 				if id['valid']:
 					h.begin('<td>')
 					h.line('<input type="checkbox" name="ids" value="{0}" checked style="margin: 0px 2px 0px 0px">', id['id'])
-					h.line('<a href="{0}{1}">{1}</a>', configuration.download_prefix, id['id'])
+					if now < id['expires']:
+						h.line('<a href="{0}{1}">{1}</a>', configuration.download_prefix, id['id'])
+					else:
+						h.line('{0}', id['id'])
 					h.end('</td>')
 					h.line('<td class="hidden-xs hidden-sm">{0}</td>', str(id['hits']))
 					h.line('<td>{0}</td>', time.strftime(configuration.time_format, time.localtime(id['expires'])))
-					h.line('<td class="hidden-xs" style="font-size: 90%">{0}</td>', '{0}/{1}'.format(*id['mount_path']).replace('/', '/\u200b'))
+					h.begin('<td class="hidden-xs" style="font-size: 90%">')
+					if id['download']:
+						h.line('<span class="glyphicon glyphicon-download-alt" style="margin: 0px 2px 0px 0px"></span>')
+					h.line('{0}', '{0}/{1}'.format(*id['mount_path']).replace('/', '/\u200b'))
+					h.end('</td>')
 				else:
 					h.line('<td><input type="checkbox" disabled style="margin: 0px 2px 0px 0px"> {0}</td>', id['id'])
 					h.line('<td class="hidden-xs hidden-sm">&ndash;</td>')
@@ -169,9 +182,10 @@ def handler(environ, writer, parameter):
 			h.end('</div>')
 
 		h.begin('<div class="form-group">')
-		h.line('<label for="delay">Delay:</label>')
+		h.line('<label for="delay">Expiration:</label>')
 		h.begin('<select class="form-control" name="delay">')
-		h.line('<option value="0">None</option>')
+		h.line('<option value="{0}">Expired</option>', str(-(now + configuration.download_delay)))
+		h.line('<option value="0" selected>Keep</option>')
 		h.line('<option value="3600">+1 hour</option>')
 		h.line('<option value="7200">+2 hours</option>')
 		h.line('<option value="14400">+4 hours</option>')
@@ -185,7 +199,17 @@ def handler(environ, writer, parameter):
 		h.line('<option value="2592000">+1 month</option>')
 		h.end('</select>')
 		h.end('</div>')
-		h.line('<input type="submit" class="btn btn-default" value="Update">')
+
+		h.begin('<div class="form-group">')
+		h.line('<label for="download">Disposition:</label>')
+		h.begin('<select class="form-control" name="download">')
+		h.line('<option value="">Keep</option>')
+		h.line('<option value="0">View</option>')
+		h.line('<option value="1">Download</option>')
+		h.end('</select>')
+		h.end('</div>')
+
+		h.line('<button type="submit" class="btn btn-default">Update</button>')
 
 		h.end('</form>')
 
