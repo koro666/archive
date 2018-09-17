@@ -4,7 +4,7 @@ import sqlite3
 import common
 import configuration
 
-database_path = os.path.join(configuration.database_directory, 'state.sqlite')
+database_path = os.path.join(configuration.database_directory, 'archive.sqlite')
 
 def open_database():
 	db = sqlite3.connect(database_path)
