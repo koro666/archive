@@ -39,7 +39,7 @@ How to install
 --------------
 
 - `git clone` the repository;
-- Edit `configuration.py` to your liking (see documentation);
+- Edit `configuration.py` to your liking (see [documentation](documentation/configuration.md));
 - Add and commit your changes so you can just `git pull --rebase` later;
 - Run `nginx.py` to generate an example Nginx configuration
 - Set up `server.py` to be run as a daemon: [Linux](https://www.freedesktop.org/software/systemd/man/systemd.service.html), [FreeBSD](https://www.freebsd.org/doc/en/books/porters-handbook/rc-scripts.html) [(advanced)](https://www.freebsd.org/doc/en_US.ISO8859-1/articles/rc-scripting/);
