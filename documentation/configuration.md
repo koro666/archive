@@ -77,7 +77,7 @@ Controls the look of the random IDs used in the short link generation code.
 
 `rid_bits_state` and `rid_bits_noise`: Controls the size, and look, of a generated random ID.
 
-The sum of the amount of state and noise bits control the length of a generated random ID. The amount of state bits controls how many IDs can be generated before "running out", wheres the amount of noise bits control how "random" two sequentially-generated IDs will look.
+The sum of the amount of state and noise bits control the length of a generated random ID. The amount of state bits controls how many IDs can be generated before "running out", wheres the amount of noise bits control how "random" two sequentially-generated IDs will look. See the [description](randomid.md) of the generation algorithm.
 
 Browsing
 --------
