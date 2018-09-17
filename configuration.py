@@ -11,6 +11,7 @@ browse_users = ['guest']
 editor_users = ['editor']
 
 download_delay = 3600
+time_format = '%x %X'
 
 # Webserver
 static_prefix = '/static/'
