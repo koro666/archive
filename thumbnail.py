@@ -124,14 +124,10 @@ def convert_media_to_animated(in_path, out_path, scale, duration):
 		argv_prefix = make_nice_argv()
 		argv_prefix.extend([ffmpeg_binary, '-f', 'image2', '-framerate', str(configuration.thumbnail_animated_framerate), '-i', os.path.join(temporary_directory, 'frame%d.png')])
 
-		argv = list(argv_prefix)
-		argv.extend(['-y', '-vf', 'palettegen', palette_file])
-
+		argv = argv_prefix + ['-y', '-vf', 'palettegen', palette_file]
 		subprocess.check_call(argv, stdin=null_fd, stdout=null_fd, stderr=null_fd)
 
-		argv = list(argv_prefix)
-		argv.extend(['-i', palette_file, '-y', '-lavfi', 'paletteuse', out_path])
-
+		argv = argv_prefix + ['-i', palette_file, '-y', '-lavfi', 'paletteuse', out_path]
 		subprocess.check_call(argv, stdin=null_fd, stdout=null_fd, stderr=null_fd)
 	finally:
 		if temporary_directory:
@@ -194,10 +190,8 @@ def handler(environ, writer, parameter):
 		return make_thumbnail_error(1, 'invalid-scale')
 
 	with database.open_database() as db:
-		values = (id, int(time.time()))
-
 		csr = db.cursor()
-		csr.execute('SELECT mount, path FROM ids WHERE id = ? AND expires > ?', values)
+		csr.execute('SELECT mount, path FROM ids WHERE id = ? AND expires > ?', (id, int(time.time())))
 		result = csr.fetchone()
 
 	if not result:
