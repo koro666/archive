@@ -75,7 +75,7 @@ def render_page(environ, writer, code=200, headers=[], title=configuration.name,
 	h.begin('<head>')
 	h.line('<meta charset="utf-8">')
 	h.line('<meta http-equiv="X-UA-Compatible" content="IE=edge">')
-	h.line('<meta name="referrer" content="no-referrer">')
+	h.line('<meta name="referrer" content="same-origin">')
 	h.line('<meta name="viewport" content="width=device-width, initial-scale=1">')
 	h.line('<title>{0}</title>', title)
 	h.line('<link href="{0}" rel="stylesheet" integrity="{1}" crossorigin="anonymous">', theme.url, theme.sri)
