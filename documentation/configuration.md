@@ -88,7 +88,7 @@ Browsing
 
 `thumbnail_filename_salt`: Salt affecting the names of the thumbnail files in the case. **This value should be changed from the default, and kept secret.**
 
-`thumbnail_animated_framecount`: How many frames off the source video to pick for an animated thumbnail. Higher values will slow down thumbnail generation, as well as make for bigger files.
+`thumbnail_animated_framecount`: How many frames of the source video to pick for an animated thumbnail. Higher values will slow down thumbnail generation, as well as make for bigger files.
 
 `thumbnail_animated_framerate`: Number of frames per second to show in an animated thumbnail.
 

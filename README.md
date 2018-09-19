@@ -6,7 +6,7 @@ What is it?
 
 `archive` is a web application that allows browsing files on a web server. It's basically auto-indexing on steroids.
 
-It originally started as a loose collection of Bash CGI scripts meant to slightly improve on auto-indexing. The (very unoriginal) name comes from the fact that it allowed browsing an "archive" of files. It grew over time and got converted a Python 2.7 FastCGI server. This latest iteration is a total, much cleaner rewrite targetting Python 3.7.
+It originally started as a loose collection of Bash CGI scripts meant to slightly improve on auto-indexing. The (very unoriginal) name comes from the fact that it allowed browsing an "archive" of files. It grew over time and got converted a Python 2.7 FastCGI server. This latest iteration is a total, much cleaner rewrite targeting Python 3.7.
 
 Features
 --------
