@@ -3,6 +3,7 @@ import os
 import sys
 import math
 import random
+import contextlib
 import common
 import database
 import configuration
@@ -103,7 +104,7 @@ if __name__ == '__main__':
 	else:
 		count = 1
 
-	with database.open_database() as db:
+	with contextlib.closing(database.open_database()) as db:
 		state_range = get_state_range(db, count)
 
 	for state in state_range:

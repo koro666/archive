@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.7
 import sys
 import time
+import contextlib
 import subprocess
 import common
 import configuration
@@ -12,7 +13,7 @@ rm_binary = '/bin/rm'
 assert(isinstance(configuration.thumbnail_expire_days, int))
 
 def clean_expired_ids():
-	with database.open_database() as db:
+	with contextlib.closing(database.open_database()) as db:
 		with db:
 			db.execute("DELETE FROM ids WHERE expires <= ?", (int(time.time()),))
 

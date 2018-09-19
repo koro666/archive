@@ -3,6 +3,7 @@ import os
 import time
 import json
 import shlex
+import contextlib
 import urllib.parse
 import http.cookies
 import traceback
@@ -129,7 +130,7 @@ def scan_directory(mount_path, fs_path, user, is_editor):
 	result = []
 	expires = int(time.time()) + configuration.download_delay
 
-	with database.open_database() as db:
+	with contextlib.closing(database.open_database()) as db:
 		with db:
 			for raw_entry in raw_result_directories:
 				result.append({
@@ -435,7 +436,7 @@ def subhandler_html(environ, writer, mount_path, fs_path, name, is_editor, direc
 	def contents_editor(h):
 		h.begin('<div class="well">')
 
-		with database.open_database() as db:
+		with contextlib.closing(database.open_database()) as db:
 			next_state = randomid.peek_state(db)
 
 		invalid_state = randomid.invalid

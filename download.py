@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.7
 import time
+import contextlib
 import urllib.parse
 import common
 import configuration
@@ -11,7 +12,7 @@ def handler(environ, writer, parameter):
 	if not randomid.validate_id(parameter):
 		return page.render_error_page(environ, writer, 400, 'Bad link.')
 
-	with database.open_database() as db:
+	with contextlib.closing(database.open_database()) as db:
 		with db:
 			values = (parameter, int(time.time()))
 

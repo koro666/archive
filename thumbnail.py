@@ -2,6 +2,7 @@
 import os
 import sys
 import time
+import contextlib
 import fcntl
 import json
 import base64
@@ -189,7 +190,7 @@ def handler(environ, writer, parameter):
 	else:
 		return make_thumbnail_error(1, 'invalid-scale')
 
-	with database.open_database() as db:
+	with contextlib.closing(database.open_database()) as db:
 		csr = db.cursor()
 		csr.execute('SELECT mount, path FROM ids WHERE id = ? AND expires > ?', (id, int(time.time())))
 		result = csr.fetchone()

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.7
 import time
+import contextlib
 import urllib.parse
 import common
 import configuration
@@ -52,7 +53,7 @@ def fetch_update_ids(ids, delay=0, download=None):
 		return []
 
 	result = []
-	with database.open_database() as db:
+	with contextlib.closing(database.open_database()) as db:
 		with db:
 			for id in ids:
 				if not randomid.validate_id(id):
