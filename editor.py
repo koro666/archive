@@ -129,6 +129,7 @@ def handler(environ, writer, parameter):
 
 		h.begin('<form method="post">')
 
+		now = int(time.time())
 		if ids:
 			h.begin('<table class="table table-striped table-bordered">')
 			h.begin('<colgroup>')
@@ -147,7 +148,6 @@ def handler(environ, writer, parameter):
 			h.end('</thead>')
 			h.begin('<tbody>')
 
-			now = int(time.time())
 			for id in ids:
 				h.begin('<tr>')
 
