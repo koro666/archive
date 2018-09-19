@@ -45,9 +45,9 @@ rid_bits_state = 32
 rid_bits_noise = 31
 
 # Browsing
-image_extensions = [".bmp", ".gif", ".jpe", ".jpg", ".jpeg", ".png"]
-audio_extensions = [".aiff", ".flac", ".m4a", ".mp3", ".ogg", ".wav", ".wma"]
-video_extensions = [".3gp", ".asf", ".avi", ".f4v", ".flv", ".m4v", ".mkv", ".mov", ".mpg", ".mpeg", ".mp4", ".mts", ".ts", ".webm", ".wmv"]
+image_extensions = ['.bmp', '.gif', '.jpe', '.jpg', '.jpeg', '.png']
+audio_extensions = ['.aiff', '.flac', '.m4a', '.mp3', '.ogg', '.wav', '.wma']
+video_extensions = ['.3gp', '.asf', '.avi', '.f4v', '.flv', '.m4v', '.mkv', '.mov', '.mpg', '.mpeg', '.mp4', '.mts', '.ts', '.webm', '.wmv']
 
 thumbnail_nice = 20
 thumbnail_concurrent = 4
