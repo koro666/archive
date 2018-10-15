@@ -92,6 +92,7 @@ def scan_root():
 			'fs_path': fs_path,
 			'type': 'drive',
 			'hidden': False,
+			'mtime': None,
 			'used': used,
 			'size': size,
 			'uri': urllib.parse.quote(make_uri_from_mount_path((name, ''), None, True), encoding='utf-8', errors='surrogateescape'),
@@ -136,12 +137,19 @@ def scan_directory(mount_path, fs_path, user, is_editor):
 	with contextlib.closing(database.open_database()) as db:
 		with db:
 			for raw_entry in raw_result_directories:
+				buf = None
+				try:
+					buf = raw_entry.stat()
+				except:
+					pass
+
 				result.append({
 					'name': raw_entry.name,
 					'fs_path': raw_entry.path,
 					'type': 'directory',
 					'hidden': is_hidden_directory_name(raw_entry.name, False),
 					'id': None,
+					'mtime': int(buf.st_mtime) if buf else None,
 					'used': None,
 					'size': None,
 					'uri': urllib.parse.quote(make_uri_from_mount_path(mount_path, raw_entry.name, True), encoding='utf-8', errors='surrogateescape'),
@@ -198,6 +206,7 @@ def scan_directory(mount_path, fs_path, user, is_editor):
 					'type': 'file',
 					'hidden': is_hidden_file_name(raw_entry.name, False),
 					'id': unique_id,
+					'mtime': int(buf.st_mtime) if buf else None,
 					'used': buf.st_blocks * 512 if buf else None,
 					'size': buf.st_size if buf else None,
 					'uri': configuration.download_prefix + unique_id,
