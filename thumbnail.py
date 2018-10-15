@@ -19,7 +19,7 @@ import randomid
 
 nice_binary = '/usr/bin/nice'
 
-if sys.platform.startswith('freebsd'):
+if sys.platform.startswith('freebsd') or sys.platform.startswith('openbsd'):
 	ffprobe_binary = '/usr/local/bin/ffprobe'
 	ffmpeg_binary = '/usr/local/bin/ffmpeg'
 else:
