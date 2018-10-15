@@ -80,8 +80,10 @@ def scan_root():
 			pass
 
 		if statbuf:
-			size = (statbuf.f_blocks - statbuf.f_bfree) * statbuf.f_frsize
+			used = (statbuf.f_blocks - statbuf.f_bfree) * statbuf.f_frsize
+			size = statbuf.f_blocks * statbuf.f_frsize
 		else:
+			used = None
 			size = None
 
 		result.append({
@@ -90,6 +92,7 @@ def scan_root():
 			'fs_path': fs_path,
 			'type': 'drive',
 			'hidden': False,
+			'used': used,
 			'size': size,
 			'uri': urllib.parse.quote(make_uri_from_mount_path((name, ''), None, True), encoding='utf-8', errors='surrogateescape'),
 			'icons': drive_icons,
@@ -139,6 +142,7 @@ def scan_directory(mount_path, fs_path, user, is_editor):
 					'type': 'directory',
 					'hidden': is_hidden_directory_name(raw_entry.name, False),
 					'id': None,
+					'used': None,
 					'size': None,
 					'uri': urllib.parse.quote(make_uri_from_mount_path(mount_path, raw_entry.name, True), encoding='utf-8', errors='surrogateescape'),
 					'icons': directory_icons,
@@ -194,6 +198,7 @@ def scan_directory(mount_path, fs_path, user, is_editor):
 					'type': 'file',
 					'hidden': is_hidden_file_name(raw_entry.name, False),
 					'id': unique_id,
+					'used': buf.st_blocks * 512 if buf else None,
 					'size': buf.st_size if buf else None,
 					'uri': configuration.download_prefix + unique_id,
 					'icons': icons,
@@ -400,7 +405,7 @@ def subhandler_html(environ, writer, mount_path, fs_path, name, is_editor, direc
 			h.line('<a href="{0}">{1}</a>', entry['uri'], entry['name'])
 			h.end('</td>')
 
-			size = entry['size']
+			size = entry['size'] if mount_path else entry['used']
 			if size is None:
 				h.line('<td class="hidden-xs">&ndash;</td>')
 			else:
