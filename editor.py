@@ -160,7 +160,7 @@ def handler(environ, writer, parameter):
 						h.line('{0}', id['id'])
 					h.end('</td>')
 					h.line('<td class="hidden-xs hidden-sm">{0}</td>', str(id['hits']))
-					h.line('<td>{0}</td>', time.strftime(configuration.time_format, time.localtime(id['expires'])))
+					h.line('<td>{0}</td>', page.pretty_time(id['expires']))
 					h.begin('<td class="hidden-xs" style="font-size: 90%">')
 					if id['download']:
 						h.line('<span class="glyphicon glyphicon-download-alt" style="margin: 0px 2px 0px 0px"></span>')

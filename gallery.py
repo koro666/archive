@@ -418,18 +418,7 @@ def subhandler_html(environ, writer, mount_path, fs_path, name, is_editor, direc
 			if size is None:
 				h.line('<td class="hidden-xs">&ndash;</td>')
 			else:
-				pretty_size = None
-				if size < 1024:
-					pretty_size = '%uB' % size
-				elif size < 1048576:
-					pretty_size = '%uK' % (size / 1024)
-				elif size < 8589934592:
-					pretty_size = '%.1fM' % (size / 1048576.0)
-				elif size < 1099511627776:
-					pretty_size = '%.2fG' % (size / 1073741824.0)
-				else:
-					pretty_size = '%.2fT' % (size / 1099511627776.0)
-				h.line('<td class="hidden-xs">{0}</td>', pretty_size)
+				h.line('<td class="hidden-xs">{0}</td>', page.pretty_size(size))
 
 			h.end('</tr>')
 

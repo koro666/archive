@@ -1,4 +1,5 @@
 #!/usr/bin/env python3.7
+import time
 import html
 import collections
 import urllib.parse
@@ -66,6 +67,21 @@ def make_tag(tag, attributes):
 
 	format = '<{0}>'.format(' '.join(format))
 	return [format] + values
+
+def pretty_time(value):
+	return time.strftime(configuration.time_format, time.localtime(value))
+
+def pretty_size(value):
+	if value < 1024:
+		return '%uB' % value
+	elif value < 1048576:
+		return '%uK' % (value / 1024)
+	elif value < 8589934592:
+		return '%.1fM' % (value / 1048576.0)
+	elif value < 1099511627776:
+		return '%.2fG' % (value / 1073741824.0)
+	else:
+		return '%.2fT' % (value / 1099511627776.0)
 
 def render_page(environ, writer, code=200, headers=[], title=configuration.name, link_cb=None, navbar_cb=None, content_cb=None, script_cb=None):
 	theme = themes[configuration.theme]
