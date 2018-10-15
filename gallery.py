@@ -390,13 +390,15 @@ def subhandler_html(environ, writer, mount_path, fs_path, name, is_editor, direc
 	def contents_list(h):
 		h.begin('<table class="table table-striped table-bordered">')
 		h.begin('<colgroup>')
-		h.line('<col class="col-xs-12 col-sm-10">')
+		h.line('<col class="col-xs-12 col-sm-10 col-md-8">')
 		h.line('<col class="col-xs-0 col-sm-2 hidden-xs">')
+		h.line('<col class="col-xs-0 col-sm-0 col-md-2 hidden-xs hidden-sm">')
 		h.end('</colgroup>')
 		h.begin('<thead>')
 		h.begin('<tr class="hidden-xs">')
 		h.line('<th>Name</th>')
 		h.line('<th class="hidden-xs">{0}</th>', 'Size' if mount_path else 'Used')
+		h.line('<th class="hidden-xs hidden-sm">{0}</th>', 'Modified' if mount_path else 'Size')
 		h.end('</tr>')
 		h.end('</thead>')
 		h.begin('<tbody>')
@@ -414,11 +416,28 @@ def subhandler_html(environ, writer, mount_path, fs_path, name, is_editor, direc
 			h.line('<a href="{0}">{1}</a>', entry['uri'], entry['name'])
 			h.end('</td>')
 
-			size = entry['size'] if mount_path else entry['used']
-			if size is None:
+			info0 = None
+			info1 = None
+			if mount_path:
+				if entry['size'] is not None:
+					info0 = page.pretty_size(entry['size'])
+				if entry['mtime'] is not None:
+					info1 = page.pretty_time(entry['mtime'])
+			else:
+				if entry['used'] is not None:
+					info0 = page.pretty_size(entry['used'])
+				if entry['size'] is not None:
+					info1 = page.pretty_size(entry['size'])
+
+			if info0 is None:
 				h.line('<td class="hidden-xs">&ndash;</td>')
 			else:
-				h.line('<td class="hidden-xs">{0}</td>', page.pretty_size(size))
+				h.line('<td class="hidden-xs">{0}</td>', info0)
+
+			if info1 is None:
+				h.line('<td class="hidden-xs hidden-sm">&ndash;</td>')
+			else:
+				h.line('<td class="hidden-xs hidden-sm">{0}</td>', info1)
 
 			h.end('</tr>')
 
