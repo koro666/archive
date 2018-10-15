@@ -392,13 +392,13 @@ def subhandler_html(environ, writer, mount_path, fs_path, name, is_editor, direc
 		h.begin('<colgroup>')
 		h.line('<col class="col-xs-12 col-sm-10 col-md-8">')
 		h.line('<col class="col-xs-0 col-sm-2 hidden-xs">')
-		h.line('<col class="col-xs-0 col-sm-0 col-md-2 hidden-xs hidden-sm">')
+		h.line('<col class="col-xs-0 col-sm-0 col-md-0 col-lg-2 hidden-xs hidden-sm hidden-md">')
 		h.end('</colgroup>')
 		h.begin('<thead>')
 		h.begin('<tr class="hidden-xs">')
 		h.line('<th>Name</th>')
 		h.line('<th class="hidden-xs">{0}</th>', 'Size' if mount_path else 'Used')
-		h.line('<th class="hidden-xs hidden-sm">{0}</th>', 'Modified' if mount_path else 'Size')
+		h.line('<th class="hidden-xs hidden-sm hidden-md">{0}</th>', 'Modified' if mount_path else 'Size')
 		h.end('</tr>')
 		h.end('</thead>')
 		h.begin('<tbody>')
@@ -435,9 +435,9 @@ def subhandler_html(environ, writer, mount_path, fs_path, name, is_editor, direc
 				h.line('<td class="hidden-xs">{0}</td>', info0)
 
 			if info1 is None:
-				h.line('<td class="hidden-xs hidden-sm">&ndash;</td>')
+				h.line('<td class="hidden-xs hidden-sm hidden-md">&ndash;</td>')
 			else:
-				h.line('<td class="hidden-xs hidden-sm">{0}</td>', info1)
+				h.line('<td class="hidden-xs hidden-sm hidden-md">{0}</td>', info1)
 
 			h.end('</tr>')
 
