@@ -267,6 +267,24 @@ def subhandler_bbcode(environ, writer, mount_path, fs_path, name, is_editor, dir
 
 	return (200, [('Content-Type', 'text/plain'), page.make_nocache_header(), page.make_content_disposition_header(name, '.txt')])
 
+def subhandler_bbcode_table(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
+	writer.write('[table]\n')
+	writer.write('[tr][td][b]Name[/b][/td][td][b]Size[/b][/td][td][b]Modified[/b][/td][/tr]\n')
+
+	for entry in directory:
+		if entry['type'] != 'file':
+			continue
+
+		writer.write('[tr]\n')
+		writer.write('[td][url={0}]{1}[/url][/td]\n'.format(page.uri_to_url(environ, entry['uri']), entry['name']))
+		writer.write('[td]{0}[/td]\n'.format(page.pretty_size(entry['size'])))
+		writer.write('[td]{0}[/td]\n'.format(page.pretty_time(entry['mtime'])))
+		writer.write('[/tr]\n')
+
+	writer.write('[/table]\n')
+
+	return (200, [('Content-Type', 'text/plain'), page.make_nocache_header(), page.make_content_disposition_header(name, '.txt')])
+
 def subhandler_html(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
 	list_mode = False
 	if 'HTTP_COOKIE' in environ:
@@ -539,6 +557,7 @@ subhandlers = {
 	'txt': subhandler_text,
 	'wget': subhandler_wget,
 	'bbcode': subhandler_bbcode,
+	'bbtable': subhandler_bbcode_table,
 	'html': subhandler_html
 }
 
