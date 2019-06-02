@@ -258,6 +258,15 @@ def subhandler_wget(environ, writer, mount_path, fs_path, name, is_editor, direc
 
 	return (200, [('Content-Type', 'application/x-sh'), page.make_nocache_header(), page.make_content_disposition_header(name, '.sh')])
 
+def subhandler_bbcode(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
+	for entry in directory:
+		if entry['type'] != 'file':
+			continue
+
+		writer.write('[url={0}]{1}[/url]\n'.format(page.uri_to_url(environ, entry['uri']), entry['name']))
+
+	return (200, [('Content-Type', 'text/plain'), page.make_nocache_header(), page.make_content_disposition_header(name, '.txt')])
+
 def subhandler_html(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
 	list_mode = False
 	if 'HTTP_COOKIE' in environ:
@@ -529,6 +538,7 @@ subhandlers = {
 	'm3u': subhandler_playlist,
 	'txt': subhandler_text,
 	'wget': subhandler_wget,
+	'bbcode': subhandler_bbcode,
 	'html': subhandler_html
 }
 
