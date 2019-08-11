@@ -220,7 +220,7 @@ def scan_directory(mount_path, fs_path, user, is_editor):
 
 	return result
 
-def subhandler_json(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
+def subhandler_json(environ, cookies, writer, mount_path, fs_path, name, is_editor, directory, message):
 	if not is_editor:
 		for entry in directory:
 			entry.pop('fs_path', None)
@@ -229,7 +229,7 @@ def subhandler_json(environ, writer, mount_path, fs_path, name, is_editor, direc
 
 	return (200, [('Content-Type', 'application/json'), page.make_nocache_header(), page.make_content_disposition_header(name, '.json')])
 
-def subhandler_playlist(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
+def subhandler_playlist(environ, cookies, writer, mount_path, fs_path, name, is_editor, directory, message):
 	writer.write('#EXTM3U\n')
 	for entry in directory:
 		if not entry['playable']:
@@ -240,13 +240,13 @@ def subhandler_playlist(environ, writer, mount_path, fs_path, name, is_editor, d
 
 	return (200, [('Content-Type', 'application/vnd.apple.mpegurl'), page.make_nocache_header(), page.make_content_disposition_header(name, '.m3u8')])
 
-def subhandler_text(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
+def subhandler_text(environ, cookies, writer, mount_path, fs_path, name, is_editor, directory, message):
 	for entry in directory:
 		writer.write('{0}\n'.format(page.uri_to_url(environ, entry['uri'])))
 
 	return (200, [('Content-Type', 'text/plain'), page.make_nocache_header(), page.make_content_disposition_header(name, '.txt')])
 
-def subhandler_wget(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
+def subhandler_wget(environ, cookies, writer, mount_path, fs_path, name, is_editor, directory, message):
 	writer.write('#!/bin/sh\n')
 	for entry in directory:
 		if entry['type'] != 'file':
@@ -258,7 +258,7 @@ def subhandler_wget(environ, writer, mount_path, fs_path, name, is_editor, direc
 
 	return (200, [('Content-Type', 'application/x-sh'), page.make_nocache_header(), page.make_content_disposition_header(name, '.sh')])
 
-def subhandler_bbcode(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
+def subhandler_bbcode(environ, cookies, writer, mount_path, fs_path, name, is_editor, directory, message):
 	for entry in directory:
 		if entry['type'] != 'file':
 			continue
@@ -267,7 +267,7 @@ def subhandler_bbcode(environ, writer, mount_path, fs_path, name, is_editor, dir
 
 	return (200, [('Content-Type', 'text/plain'), page.make_nocache_header(), page.make_content_disposition_header(name, '.txt')])
 
-def subhandler_bbcode_table(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
+def subhandler_bbcode_table(environ, cookies, writer, mount_path, fs_path, name, is_editor, directory, message):
 	writer.write('[table]\n')
 	writer.write('[tr][td][b]Name[/b][/td][td][b]Size[/b][/td][td][b]Modified[/b][/td][/tr]\n')
 
@@ -285,15 +285,11 @@ def subhandler_bbcode_table(environ, writer, mount_path, fs_path, name, is_edito
 
 	return (200, [('Content-Type', 'text/plain'), page.make_nocache_header(), page.make_content_disposition_header(name, '.txt')])
 
-def subhandler_html(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
-	list_mode = False
-	if 'HTTP_COOKIE' in environ:
-		cookie = http.cookies.SimpleCookie(environ['HTTP_COOKIE'])
-
-		try:
-			list_mode = bool(int(cookie['listmode'].value))
-		except:
-			pass
+def subhandler_html(environ, cookies, writer, mount_path, fs_path, name, is_editor, directory, message):
+	try:
+		list_mode = bool(int(cookies['listmode'].value))
+	except:
+		list_mode = False
 
 	theme_is_dark = page.themes[configuration.theme].dark
 
@@ -547,7 +543,7 @@ def subhandler_html(environ, writer, mount_path, fs_path, name, is_editor, direc
 		content_cb = contents_select,
 		script_cb = scripts)
 
-def subhandler_error(environ, writer, mount_path, fs_path, name, is_editor, directory, message):
+def subhandler_error(environ, cookies, writer, mount_path, fs_path, name, is_editor, directory, message):
 	return page.render_error_page(environ, writer, 400, 'Bad format.')
 
 subhandlers = {
@@ -579,6 +575,11 @@ def handler(environ, writer, parameter):
 	user = environ.get('REMOTE_USER')
 	is_editor = user in configuration.editor_users
 
+	try:
+		cookies = http.cookies.SimpleCookie(environ['HTTP_COOKIE'])
+	except:
+		cookies = http.cookies.SimpleCookie()
+
 	message = None
 	if fs_path:
 		try:
@@ -595,4 +596,4 @@ def handler(environ, writer, parameter):
 		message = 'There is nothing here.'
 
 	subhandler = subhandlers.get(environ['QUERY_STRING'], subhandler_error)
-	return subhandler(environ, writer, mount_path, fs_path, name, is_editor, directory, message)
+	return subhandler(environ, cookies, writer, mount_path, fs_path, name, is_editor, directory, message)
