@@ -347,6 +347,7 @@ def subhandler_html(environ, cookies, writer, mount_path, fs_path, name, is_edit
 	def navbar(h):
 		if any(map(lambda x: x['playable'], directory)):
 			h.line('<li><a href="?m3u"><span class="glyphicon glyphicon-play"></span> Play</a></li>')
+
 		if is_editor:
 			h.begin('<li class="dropdown">')
 			h.begin('<a class="dropdown-toggle" id="show_editor" data-toggle="dropdown" href="#">')
@@ -365,6 +366,7 @@ def subhandler_html(environ, cookies, writer, mount_path, fs_path, name, is_edit
 			h.line('<li><a href="#" id="link_submit_w" data-delay="604800"><span class="glyphicon glyphicon-time"></span> Extend <span class="text-muted">(1 week)</span></a></li>')
 			h.end('</ul>')
 			h.end('</li>')
+
 		h.begin('<li class="dropdown">')
 		h.begin('<a class="dropdown-toggle" data-toggle="dropdown" href="#">')
 		h.line('<span class="glyphicon glyphicon-eye-open"></span>')
@@ -376,6 +378,24 @@ def subhandler_html(environ, cookies, writer, mount_path, fs_path, name, is_edit
 		h.line('<li><a href="#" id="listmode_disable"><span class="glyphicon glyphicon-th-large"></span> Grid</a></li>')
 		h.end('</ul>')
 		h.end('</li>')
+
+		if mount_path:
+			h.begin('<li class="dropdown">')
+			h.begin('<a class="dropdown-toggle" data-toggle="dropdown" href="#">')
+			h.line('<span class="glyphicon glyphicon-sort"></span>')
+			h.line('Sort')
+			h.line('<span class="caret"></span>')
+			h.end('</a>')
+			h.begin('<ul class="dropdown-menu">')
+			h.line('<li><a href="#" id="sortkey_name"><span class="glyphicon glyphicon-sort-by-alphabet"></span> Name</a></li>')
+			h.line('<li><a href="#" id="sortkey_size"><span class="glyphicon glyphicon-sort-by-order"></span> Size</a></li>')
+			h.line('<li><a href="#" id="sortkey_mtime"><span class="glyphicon glyphicon-time"></span> Modified</a></li>')
+			h.line('<li role="separator" class="divider"></li>')
+			h.line('<li><a href="#" id="sortmode_asc"><span class="glyphicon glyphicon-sort-by-attributes"></span> Ascending</a></li>')
+			h.line('<li><a href="#" id="sortmode_desc"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span> Descending</a></li>')
+
+			h.end('</ul>')
+			h.end('</li>')
 
 	def breadcrumb(h):
 		h.begin('<ol class="breadcrumb">')
@@ -570,8 +590,8 @@ def subhandler_html(environ, cookies, writer, mount_path, fs_path, name, is_edit
 		h.line('const cookie_path = \'{0}\';', configuration.browse_prefix)
 		h.line('const is_editor = {0};', str(is_editor).lower())
 		h.line('const list_mode = {0};', str(list_mode).lower())
-		#h.line('const sort_key = \'{0}\';', sort_info[0]);
-		#h.line('const sort_mode = \'{0}\';', 'desc' if sort_info[1] else 'asc');
+		h.line('const sort_key = \'{0}\';', sort_info[0]);
+		h.line('const sort_mode = \'{0}\';', 'desc' if sort_info[1] else 'asc');
 		#h.line('const mixed = {0};', str(sort_info[1]).lower())
 		h.end('</script>')
 		h.line('<script src="{0}archive.js"></script>', configuration.static_prefix)

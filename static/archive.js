@@ -36,8 +36,9 @@ $(document).ready(function()
 		{
 			document.cookie = 'listmode=1;path=' + cookie_path;
 			window.location.reload(true);
-			e.preventDefault();
 		}
+
+		e.preventDefault();
 	});
 
 	$('#listmode_disable').click(function(e)
@@ -46,8 +47,64 @@ $(document).ready(function()
 		{
 			document.cookie = 'listmode=0;path=' + cookie_path;
 			window.location.reload(true);
-			e.preventDefault();
 		}
+
+		e.preventDefault();
+	});
+
+	$('#sortkey_name').click(function(e)
+	{
+		if (sort_key != 'name')
+		{
+			document.cookie = 'sortkey=name;path=' + cookie_path;
+			window.location.reload(true);
+		}
+
+		e.preventDefault();
+	});
+
+	$('#sortkey_size').click(function(e)
+	{
+		if (sort_key != 'size')
+		{
+			document.cookie = 'sortkey=size;path=' + cookie_path;
+			window.location.reload(true);
+		}
+
+		e.preventDefault();
+	});
+
+	$('#sortkey_mtime').click(function(e)
+	{
+		if (sort_key != 'mtime')
+		{
+			document.cookie = 'sortkey=mtime;path=' + cookie_path;
+			window.location.reload(true);
+		}
+
+		e.preventDefault();
+	});
+
+	$('#sortmode_asc').click(function(e)
+	{
+		if (sort_mode != 'asc')
+		{
+			document.cookie = 'sortmode=asc;path=' + cookie_path;
+			window.location.reload(true);
+		}
+
+		e.preventDefault();
+	});
+
+	$('#sortmode_desc').click(function(e)
+	{
+		if (sort_mode != 'desc')
+		{
+			document.cookie = 'sortmode=desc;path=' + cookie_path;
+			window.location.reload(true);
+		}
+
+		e.preventDefault();
 	});
 
 	if (!list_mode)
