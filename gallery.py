@@ -32,6 +32,22 @@ def mount_path_to_fspath(mount, path):
 
 	return os.path.join(root, path)
 
+def get_sort_info(cookies):
+	try:
+		sort_key = cookies['sortkey'].value
+	except:
+		sort_key = None
+
+	if sort_key != 'name' and sort_key != 'mtime' and sort_key != 'used' and sort_key != 'size':
+		sort_key = 'name'
+
+	try:
+		sort_mode = cookies['sortmode'].value == 'desc'
+	except:
+		sort_mode = False
+
+	return (sort_key, sort_mode)
+
 def get_uri_components_from_mount_path(mount_path):
 	components = configuration.browse_prefix[:-1].split('/')
 
@@ -106,7 +122,7 @@ def scan_root():
 
 	return result
 
-def scan_directory(mount_path, fs_path, user, is_editor):
+def scan_directory(mount_path, fs_path, sort_info, user, is_editor):
 	raw_result_directories = []
 	raw_result_files = []
 	with os.scandir(fs_path) as entries:
@@ -124,14 +140,11 @@ def scan_directory(mount_path, fs_path, user, is_editor):
 				if not is_hidden_file_name(entry.name, is_editor):
 					raw_result_files.append(entry)
 
-	sort_key = lambda x: x.name.lower()
-	raw_result_directories.sort(key=sort_key)
-	raw_result_files.sort(key=sort_key)
-
 	directory_icons = make_static_icons('folder')
 	file_icons = make_static_icons('file')
 
-	result = []
+	result_directories = []
+	result_files = []
 	expires = int(time.time()) + configuration.download_delay
 
 	with contextlib.closing(database.open_database()) as db:
@@ -143,7 +156,7 @@ def scan_directory(mount_path, fs_path, user, is_editor):
 				except:
 					pass
 
-				result.append({
+				result_directories.append({
 					'name': raw_entry.name,
 					'fs_path': raw_entry.path,
 					'type': 'directory',
@@ -200,7 +213,7 @@ def scan_directory(mount_path, fs_path, user, is_editor):
 				else:
 					icons = file_icons
 
-				result.append({
+				result_files.append({
 					'name': raw_entry.name,
 					'fs_path': raw_entry.path,
 					'type': 'file',
@@ -218,7 +231,17 @@ def scan_directory(mount_path, fs_path, user, is_editor):
 					'glyphicon': 'picture' if is_image else 'music' if is_audio else 'facetime-video' if is_video else 'file'
 				})
 
-	return result
+	if sort_info[0] == 'name':
+		sort_key = lambda x: x['name'].lower()
+	elif sort_info[0] == 'mtime' or sort_info[0] == 'used' or sort_info[0] == 'size':
+		sort_key = lambda x: (x[sort_info[0]] or 0, x['name'].lower())
+	else:
+		sort_key = None
+
+	result_directories.sort(key=sort_key, reverse=sort_info[1])
+	result_files.sort(key=sort_key, reverse=sort_info[1])
+
+	return result_directories + result_files
 
 def subhandler_json(environ, cookies, writer, mount_path, fs_path, name, is_editor, directory, message):
 	if not is_editor:
@@ -582,8 +605,9 @@ def handler(environ, writer, parameter):
 
 	message = None
 	if fs_path:
+		sort_info = get_sort_info(cookies)
 		try:
-			directory = scan_directory(mount_path, fs_path, user, is_editor)
+			directory = scan_directory(mount_path, fs_path, sort_info, user, is_editor)
 		except OSError as e:
 			if configuration.debug:
 				traceback.print_exc()
