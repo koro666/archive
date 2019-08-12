@@ -30,12 +30,24 @@ $(document).ready(function()
 		});
 	}
 
-	$('#noop_listmode').click(function(e) { e.preventDefault(); });
-	$('#toggle_listmode').click(function(e)
+	$('#listmode_enable').click(function(e)
 	{
-		document.cookie = 'listmode=' + (+(!list_mode)) + ';path=' + cookie_path;
-		window.location.reload(true);
-		e.preventDefault();
+		if (!list_mode)
+		{
+			document.cookie = 'listmode=1;path=' + cookie_path;
+			window.location.reload(true);
+			e.preventDefault();
+		}
+	});
+
+	$('#listmode_disable').click(function(e)
+	{
+		if (list_mode)
+		{
+			document.cookie = 'listmode=0;path=' + cookie_path;
+			window.location.reload(true);
+			e.preventDefault();
+		}
 	});
 
 	if (!list_mode)

@@ -324,6 +324,8 @@ def subhandler_html(environ, cookies, writer, mount_path, fs_path, name, is_edit
 	except:
 		list_mode = False
 
+	sort_info = get_sort_info(cookies)
+
 	theme_is_dark = page.themes[configuration.theme].dark
 
 	def links(h):
@@ -363,12 +365,17 @@ def subhandler_html(environ, cookies, writer, mount_path, fs_path, name, is_edit
 			h.line('<li><a href="#" id="link_submit_w" data-delay="604800"><span class="glyphicon glyphicon-time"></span> Extend <span class="text-muted">(1 week)</span></a></li>')
 			h.end('</ul>')
 			h.end('</li>')
-		if list_mode:
-			h.line('<li class="active"><a href="#" id="noop_listmode"><span class="glyphicon glyphicon-th-list"></span> List</a></li>')
-			h.line('<li><a href="#" id="toggle_listmode"><span class="glyphicon glyphicon-th-large"></span> Grid</a></li>')
-		else:
-			h.line('<li><a href="#" id="toggle_listmode"><span class="glyphicon glyphicon-th-list"></span> List</a></li>')
-			h.line('<li class="active"><a href="#" id="noop_listmode"><span class="glyphicon glyphicon-th-large"></span> Grid</a></li>')
+		h.begin('<li class="dropdown">')
+		h.begin('<a class="dropdown-toggle" data-toggle="dropdown" href="#">')
+		h.line('<span class="glyphicon glyphicon-eye-open"></span>')
+		h.line('View')
+		h.line('<span class="caret"></span>')
+		h.end('</a>')
+		h.begin('<ul class="dropdown-menu">')
+		h.line('<li><a href="#" id="listmode_enable"><span class="glyphicon glyphicon-th-list"></span> List</a></li>')
+		h.line('<li><a href="#" id="listmode_disable"><span class="glyphicon glyphicon-th-large"></span> Grid</a></li>')
+		h.end('</ul>')
+		h.end('</li>')
 
 	def breadcrumb(h):
 		h.begin('<ol class="breadcrumb">')
@@ -563,6 +570,9 @@ def subhandler_html(environ, cookies, writer, mount_path, fs_path, name, is_edit
 		h.line('const cookie_path = \'{0}\';', configuration.browse_prefix)
 		h.line('const is_editor = {0};', str(is_editor).lower())
 		h.line('const list_mode = {0};', str(list_mode).lower())
+		#h.line('const sort_key = \'{0}\';', sort_info[0]);
+		#h.line('const sort_mode = \'{0}\';', 'desc' if sort_info[1] else 'asc');
+		#h.line('const mixed = {0};', str(sort_info[1]).lower())
 		h.end('</script>')
 		h.line('<script src="{0}archive.js"></script>', configuration.static_prefix)
 
