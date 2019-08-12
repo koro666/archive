@@ -46,7 +46,12 @@ def get_sort_info(cookies):
 	except:
 		sort_mode = False
 
-	return (sort_key, sort_mode)
+	try:
+		sort_mixed = bool(int(cookies['mixed'].value))
+	except:
+		sort_mixed = False
+
+	return (sort_key, sort_mode, sort_mixed)
 
 def get_uri_components_from_mount_path(mount_path):
 	components = configuration.browse_prefix[:-1].split('/')
@@ -238,10 +243,15 @@ def scan_directory(mount_path, fs_path, sort_info, user, is_editor):
 	else:
 		sort_key = None
 
-	result_directories.sort(key=sort_key, reverse=sort_info[1])
-	result_files.sort(key=sort_key, reverse=sort_info[1])
+	if sort_info[2]:
+		result = result_directories + result_files
+		result.sort(key=sort_key, reverse=sort_info[1])
+	else:
+		result_directories.sort(key=sort_key, reverse=sort_info[1])
+		result_files.sort(key=sort_key, reverse=sort_info[1])
+		result = result_directories + result_files
 
-	return result_directories + result_files
+	return result
 
 def subhandler_json(environ, cookies, writer, mount_path, fs_path, name, is_editor, directory, message):
 	if not is_editor:
