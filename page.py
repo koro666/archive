@@ -41,6 +41,25 @@ def uri_to_url(environ, uri):
 
 	return '{0}://{1}{2}'.format(scheme, host, uri)
 
+def match_in_qs(environ, values, fallback):
+	result = None
+
+	for key, value in urllib.parse.parse_qsl(environ['QUERY_STRING'], keep_blank_values=True):
+		if key == '' or value != '':
+			continue
+		if not key in values:
+			continue
+
+		if result is None:
+			result = key
+		elif result != key:
+			return fallback
+
+	if result is None:
+		result = ''
+
+	return values[result]
+
 def make_content_disposition_header(filename, extension='', inline=True):
 	return ('Content-Disposition', '{0}; filename*=UTF-8\'\'{1}'.format('inline' if inline else 'attachment', urllib.parse.quote(filename, encoding='utf-8', errors='ignore')) + extension)
 

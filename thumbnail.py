@@ -16,6 +16,7 @@ import common
 import configuration
 import database
 import randomid
+import page
 
 nice_binary = '/usr/bin/nice'
 
@@ -213,7 +214,7 @@ def handler(environ, writer, parameter):
 	if not os.path.isfile(fs_path):
 		return make_thumbnail_error(scale, 'nonexistant-path')
 
-	animated = environ['QUERY_STRING'] == 'animated'
+	animated = page.match_in_qs(environ, {'': False, 'animated': True}, False)
 
 	try:
 		filename = get_or_create_thumbnail(fs_path, scale, animated)

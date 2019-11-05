@@ -659,5 +659,5 @@ def handler(environ, writer, parameter):
 	if not message and not directory:
 		message = 'There is nothing here.'
 
-	subhandler = subhandlers.get(environ['QUERY_STRING'], subhandler_error)
+	subhandler = page.match_in_qs(environ, subhandlers, subhandler_error)
 	return subhandler(environ, cookies, writer, mount_path, fs_path, name, is_editor, directory, message)
