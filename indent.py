@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.7
+#!/usr/bin/env python3.8
 class Indenter:
 	def __init__(self, stream, transform=None):
 		self.stream = stream

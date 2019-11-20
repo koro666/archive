@@ -28,7 +28,7 @@ Requirements
 ------------
 
 - POSIX operating system (tested on Linux and FreeBSD)
-- Python 3.7
+- Python 3.8
 - Python's `sqlite` module
 - Nginx
 - FFmpeg
