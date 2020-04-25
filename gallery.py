@@ -590,8 +590,8 @@ def subhandler_html(environ, cookies, writer, mount_path, fs_path, name, is_edit
 		h.line('const cookie_path = \'{0}\';', configuration.browse_prefix)
 		h.line('const is_editor = {0};', str(is_editor).lower())
 		h.line('const list_mode = {0};', str(list_mode).lower())
-		h.line('const sort_key = \'{0}\';', sort_info[0]);
-		h.line('const sort_mode = \'{0}\';', 'desc' if sort_info[1] else 'asc');
+		h.line('const sort_key = \'{0}\';', sort_info[0])
+		h.line('const sort_mode = \'{0}\';', 'desc' if sort_info[1] else 'asc')
 		#h.line('const mixed = {0};', str(sort_info[1]).lower())
 		h.end('</script>')
 		h.line('<script src="{0}archive.js"></script>', configuration.static_prefix)

@@ -56,7 +56,7 @@ def dispatcher(environ, start_response):
 	with io.BytesIO() as writer:
 		module = module_map.get(environ.get('archive.module'), default_module)
 
-		parameter = environ['DOCUMENT_URI'];
+		parameter = environ['DOCUMENT_URI']
 		if parameter.startswith(module.prefix):
 			parameter = parameter[len(module.prefix):]
 
@@ -67,7 +67,7 @@ def dispatcher(environ, start_response):
 			handler = lambda e,w,p,h=handler: gzip_wrapper(h, e, w, p)
 
 		result = handler(environ, writer, parameter)
-		start_response('{0} {1}'.format(result[0], status_map[result[0]]), result[1]);
+		start_response('{0} {1}'.format(result[0], status_map[result[0]]), result[1])
 		return [writer.getvalue()]
 
 if __name__ == '__main__':
