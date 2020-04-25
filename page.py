@@ -111,7 +111,6 @@ def render_page(environ, writer, code=200, headers=[], title=configuration.name,
 	h.begin('<html lang="en">')
 	h.begin('<head>')
 	h.line('<meta charset="utf-8">')
-	h.line('<meta name="referrer" content="same-origin">')
 	h.line('<meta name="viewport" content="width=device-width, initial-scale=1">')
 	h.line('<meta name="theme-color" content="{0}">', theme.navbar2 if configuration.theme_inverse_navbar else theme.navbar)
 	h.line('<title>{0}</title>', title)

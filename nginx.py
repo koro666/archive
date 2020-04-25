@@ -38,6 +38,9 @@ def generate_configuration(root, stream):
 	i.line('server_name localhost;')
 	i.line()
 
+	i.line('add_header Referrer-Policy same-origin;')
+	i.line()
+
 	i.begin('location {0} {{', configuration.static_prefix)
 	i.line('alias {0}/;', configuration.static_directory)
 	i.end('}}')
