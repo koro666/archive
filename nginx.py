@@ -1,6 +1,9 @@
 #!/usr/bin/env python3.8
 import sys
 import os
+import crypt
+import string
+import secrets
 import common
 import configuration
 import indent
@@ -89,18 +92,23 @@ def generate_configuration(root, stream):
 	i.begin('location {0} {{', configuration.thumbnail_cache_prefix)
 	i.line('alias {0}/;', configuration.thumbnail_cache_directory)
 	i.end('}}')
-	i.line()
 
 	i.end('}}')
 	i.end('}}')
 
-def generate_passwords(root, stream, editor):
-	userlist = list(configuration.browse_users)
-	if editor:
-		userlist = userlist + configuration.editor_users
+def generate_passwords(root, stream, browse_password, editor_password):
+	userlist = []
+	if browse_password is not None:
+		userlist.extend((user, browse_password) for user in configuration.browse_users)
+	if editor_password is not None:
+		userlist.extend((user, editor_password) for user in configuration.editor_users)
 	userlist.sort()
-	for user in userlist:
-		stream.write('{0}:changeme\n'.format(user))
+	for user, password in userlist:
+		stream.write('{0}:{1}\n'.format(user, crypt.crypt(password, crypt.mksalt())))
+
+def make_password(length):
+	alphabet = string.ascii_letters + string.digits
+	return ''.join(secrets.choice(alphabet) for i in range(length))
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
@@ -111,8 +119,15 @@ if __name__ == '__main__':
 	with open(os.path.join(root, nginx_conf), 'w') as fp:
 		generate_configuration(root, fp)
 
+	browse_password = make_password(8)
+	editor_password = make_password(12)
+
 	with open(os.path.join(root, archive_htpasswd), 'w') as fp:
-		generate_passwords(root, fp, False)
+		generate_passwords(root, fp, browse_password, editor_password)
 
 	with open(os.path.join(root, archive_editor_htpasswd), 'w') as fp:
-		generate_passwords(root, fp, True)
+		generate_passwords(root, fp, None, editor_password)
+
+	print('Generated passwords:')
+	print(' browse: {0}'.format(browse_password))
+	print(' editor: {0}'.format(editor_password))

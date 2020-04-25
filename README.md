@@ -41,9 +41,9 @@ How to install
 - `git clone` the repository;
 - Edit `configuration.py` to your liking (see [documentation](documentation/configuration.md));
 - Add and commit your changes so you can just `git pull --rebase` later;
-- Run `nginx.py` to generate an example Nginx configuration
+- Run `nginx.py` to generate an example Nginx configuration;
 - Set up `server.py` to be run as a daemon: [Linux](https://www.freedesktop.org/software/systemd/man/systemd.service.html), [FreeBSD](https://www.freebsd.org/doc/en/books/porters-handbook/rc-scripts.html) [(advanced)](https://www.freebsd.org/doc/en_US.ISO8859-1/articles/rc-scripting/);
-- Either directly use the generated `nginx.conf`, or use it as an inspiration. **Make sure to change the default passwords in the generated `.htpasswd` files if you use them as-is**;
+- Either directly use the generated `nginx.conf`, or use it as an inspiration;
 - Add `cron.py hourly` in the server user's `crontab` as an hourly job;
 - Add `cron.py daily` in the server user's `crontab` as a daily job;
 - Start the server and (re-)start Nginx.
