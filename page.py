@@ -110,7 +110,6 @@ def render_page(environ, writer, code=200, headers=[], title=configuration.name,
 	h.line('<!doctype html>')
 	h.begin('<html lang="en">')
 	h.begin('<head>')
-	h.line('<meta charset="utf-8">')
 	h.line('<meta name="viewport" content="width=device-width, initial-scale=1">')
 	h.line('<meta name="theme-color" content="{0}">', theme.navbar2 if configuration.theme_inverse_navbar else theme.navbar)
 	h.line('<title>{0}</title>', title)
@@ -149,9 +148,9 @@ def render_page(environ, writer, code=200, headers=[], title=configuration.name,
 	h.end('</body>')
 	h.end('</html>')
 
-	return (code, [('Content-Type', 'text/html')] + headers)
+	return (code, [('Content-Type', 'text/html; charset=utf-8')] + headers)
 
 def render_error_page(environ, writer, code, message):
 	# TODO: Better error page
 	writer.write(message)
-	return (code, [('Content-Type', 'text/plain')])
+	return (code, [('Content-Type', 'text/plain; charset=utf-8')])

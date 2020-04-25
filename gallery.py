@@ -277,7 +277,7 @@ def subhandler_text(environ, cookies, writer, mount_path, fs_path, name, is_edit
 	for entry in directory:
 		writer.write('{0}\n'.format(page.uri_to_url(environ, entry['uri'])))
 
-	return (200, [('Content-Type', 'text/plain'), page.make_nocache_header(), page.make_content_disposition_header(name, '.txt')])
+	return (200, [('Content-Type', 'text/plain; charset=utf-8'), page.make_nocache_header(), page.make_content_disposition_header(name, '.txt')])
 
 def subhandler_wget(environ, cookies, writer, mount_path, fs_path, name, is_editor, directory, message):
 	writer.write('#!/bin/sh\n')
@@ -298,7 +298,7 @@ def subhandler_bbcode(environ, cookies, writer, mount_path, fs_path, name, is_ed
 
 		writer.write('[url={0}]{1}[/url]\n'.format(page.uri_to_url(environ, entry['uri']), entry['name']))
 
-	return (200, [('Content-Type', 'text/plain'), page.make_nocache_header(), page.make_content_disposition_header(name, '.txt')])
+	return (200, [('Content-Type', 'text/plain; charset=utf-8'), page.make_nocache_header(), page.make_content_disposition_header(name, '.txt')])
 
 def subhandler_bbcode_table(environ, cookies, writer, mount_path, fs_path, name, is_editor, directory, message):
 	writer.write('[table]\n')
@@ -316,7 +316,7 @@ def subhandler_bbcode_table(environ, cookies, writer, mount_path, fs_path, name,
 
 	writer.write('[/table]\n')
 
-	return (200, [('Content-Type', 'text/plain'), page.make_nocache_header(), page.make_content_disposition_header(name, '.txt')])
+	return (200, [('Content-Type', 'text/plain; charset=utf-8'), page.make_nocache_header(), page.make_content_disposition_header(name, '.txt')])
 
 def subhandler_html(environ, cookies, writer, mount_path, fs_path, name, is_editor, directory, message):
 	try:
