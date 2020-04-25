@@ -61,7 +61,13 @@ def match_in_qs(environ, values, fallback):
 	return values[result]
 
 def make_content_disposition_header(filename, extension='', inline=True):
-	return ('Content-Disposition', '{0}; filename*=UTF-8\'\'{1}'.format('inline' if inline else 'attachment', urllib.parse.quote(filename, encoding='utf-8', errors='ignore')) + extension)
+	filename = filename + extension
+	disposition = 'inline' if inline else 'attachment'
+	try:
+		attachment = 'filename={0}'.format(urllib.parse.quote(filename, encoding='ascii'))
+	except UnicodeEncodeError:
+		attachment = 'filename*=UTF-8\'\'{0}'.format(urllib.parse.quote(filename, encoding='utf-8', errors='ignore'))
+	return ('Content-Disposition', '{0}; {1}'.format(disposition, attachment))
 
 def make_nocache_header():
 	return ('Cache-Control', 'no-cache, no-store, must-revalidate')
