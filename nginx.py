@@ -106,7 +106,7 @@ if __name__ == '__main__':
 	if len(sys.argv) > 1:
 		root = os.path.normpath(os.path.abspath(sys.argv[1]))
 	else:
-		root = os.getcwd();
+		root = os.getcwd()
 
 	with open(os.path.join(root, nginx_conf), 'w') as fp:
 		generate_configuration(root, fp)
