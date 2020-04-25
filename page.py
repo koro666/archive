@@ -8,26 +8,26 @@ import common
 import configuration
 import indent
 
-Theme = collections.namedtuple('Theme', ['url', 'sri', 'dark'])
+Theme = collections.namedtuple('Theme', ['url', 'sri', 'navbar', 'navbar2', 'dark'])
 
 # https://bootswatch.com/3/
 themes = {
-	'cerulean': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css', 'sha384-zF4BRsG/fLiTGfR9QL82DrilZxrwgY/+du4p/c7J72zZj+FLYq4zY00RylP9ZjiT', False),
-	'cosmo': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css', 'sha384-h21C2fcDk/eFsW9sC9h0dhokq5pDinLNklTKoxIZRUn3+hvmgQSffLLQ4G4l2eEr', False),
-	'cyborg': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cyborg/bootstrap.min.css', 'sha384-D9XILkoivXN+bcvB2kSOowkIvIcBbNdoDQvfBNsxYAIieZbx8/SI4NeUvrRGCpDi', True),
-	'darkly': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/darkly/bootstrap.min.css', 'sha384-S7YMK1xjUjSpEnF4P8hPUcgjXYLZKK3fQW1j5ObLSl787II9p8RO9XUGehRmKsxd', True),
-	'flatly': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css', 'sha384-+ENW/yibaokMnme+vBLnHMphUYxHs34h9lpdbSLuAwGkOKFRl4C34WkjazBtb7eT', False),
-	'journal': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/journal/bootstrap.min.css', 'sha384-1L94saFXWAvEw88RkpRz8r28eQMvt7kG9ux3DdCqya/P3CfLNtgqzMnyaUa49Pl2', False),
-	'lumen': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/lumen/bootstrap.min.css', 'sha384-gv0oNvwnqzF6ULI9TVsSmnULNb3zasNysvWwfT/s4l8k5I+g6oFz9dye0wg3rQ2Q', False),
-	'paper': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css', 'sha384-awusxf8AUojygHf2+joICySzB780jVvQaVCAt1clU3QsyAitLGul28Qxb2r1e5g+', False),
-	'readable': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/readable/bootstrap.min.css', 'sha384-Li5uVfY2bSkD3WQyiHX8tJd0aMF91rMrQP5aAewFkHkVSTT2TmD2PehZeMmm7aiL', False),
-	'sandstone': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/sandstone/bootstrap.min.css', 'sha384-G3G7OsJCbOk1USkOY4RfeX1z27YaWrZ1YuaQ5tbuawed9IoreRDpWpTkZLXQfPm3', False),
-	'simplex': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css', 'sha384-C0X5qw1DlkeV0RDunhmi4cUBUkPDTvUqzElcNWm1NI2T4k8tKMZ+wRPQOhZfSJ9N', False),
-	'slate': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/slate/bootstrap.min.css', 'sha384-RpX8okQqCyUNG7PlOYNybyJXYTtGQH+7rIKiVvg1DLg6jahLEk47VvpUyS+E2/uJ', True),
-	'spacelab': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/spacelab/bootstrap.min.css', 'sha384-L/tgI3wSsbb3f/nW9V6Yqlaw3Gj7mpE56LWrhew/c8MIhAYWZ/FNirA64AVkB5pI', False),
-	'superhero': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/superhero/bootstrap.min.css', 'sha384-Xqcy5ttufkC3rBa8EdiAyA1VgOGrmel2Y+wxm4K3kI3fcjTWlDWrlnxyD6hOi3PF', True),
-	'united': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/united/bootstrap.min.css', 'sha384-pVJelSCJ58Og1XDc2E95RVYHZDPb9AVyXsI8NoVpB2xmtxoZKJePbMfE4mlXw7BJ', False),
-	'yeti': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/yeti/bootstrap.min.css', 'sha384-HzUaiJdCTIY/RL2vDPRGdEQHHahjzwoJJzGUkYjHVzTwXFQ2QN/nVgX7tzoMW3Ov', False)
+	'cerulean': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css', 'sha384-zF4BRsG/fLiTGfR9QL82DrilZxrwgY/+du4p/c7J72zZj+FLYq4zY00RylP9ZjiT', '#54b4eb', '#04519b', False),
+	'cosmo': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css', 'sha384-h21C2fcDk/eFsW9sC9h0dhokq5pDinLNklTKoxIZRUn3+hvmgQSffLLQ4G4l2eEr', '#222222', '#2780e3', False),
+	'cyborg': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cyborg/bootstrap.min.css', 'sha384-D9XILkoivXN+bcvB2kSOowkIvIcBbNdoDQvfBNsxYAIieZbx8/SI4NeUvrRGCpDi', '#060606', '#282828', True),
+	'darkly': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/darkly/bootstrap.min.css', 'sha384-S7YMK1xjUjSpEnF4P8hPUcgjXYLZKK3fQW1j5ObLSl787II9p8RO9XUGehRmKsxd', '#375a7f', '#00bc8c', True),
+	'flatly': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css', 'sha384-+ENW/yibaokMnme+vBLnHMphUYxHs34h9lpdbSLuAwGkOKFRl4C34WkjazBtb7eT', '#2c3e50', '#18bc9c', False),
+	'journal': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/journal/bootstrap.min.css', 'sha384-1L94saFXWAvEw88RkpRz8r28eQMvt7kG9ux3DdCqya/P3CfLNtgqzMnyaUa49Pl2', '#ffffff', '#eb6864', False),
+	'lumen': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/lumen/bootstrap.min.css', 'sha384-gv0oNvwnqzF6ULI9TVsSmnULNb3zasNysvWwfT/s4l8k5I+g6oFz9dye0wg3rQ2Q', '#f8f8f8', '#ffffff', False),
+	'paper': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css', 'sha384-awusxf8AUojygHf2+joICySzB780jVvQaVCAt1clU3QsyAitLGul28Qxb2r1e5g+', '#ffffff', '#2196f3', False),
+	'readable': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/readable/bootstrap.min.css', 'sha384-Li5uVfY2bSkD3WQyiHX8tJd0aMF91rMrQP5aAewFkHkVSTT2TmD2PehZeMmm7aiL', '#ffffff', '#ffffff', False),
+	'sandstone': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/sandstone/bootstrap.min.css', 'sha384-G3G7OsJCbOk1USkOY4RfeX1z27YaWrZ1YuaQ5tbuawed9IoreRDpWpTkZLXQfPm3', '#3e3f3a', '#93c54b', False),
+	'simplex': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css', 'sha384-C0X5qw1DlkeV0RDunhmi4cUBUkPDTvUqzElcNWm1NI2T4k8tKMZ+wRPQOhZfSJ9N', '#ffffff', '#d9230f', False),
+	'slate': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/slate/bootstrap.min.css', 'sha384-RpX8okQqCyUNG7PlOYNybyJXYTtGQH+7rIKiVvg1DLg6jahLEk47VvpUyS+E2/uJ', '#484e55', '#8a9196', True),
+	'spacelab': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/spacelab/bootstrap.min.css', 'sha384-L/tgI3wSsbb3f/nW9V6Yqlaw3Gj7mpE56LWrhew/c8MIhAYWZ/FNirA64AVkB5pI', '#ffffff', '#6d94bf', False),
+	'superhero': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/superhero/bootstrap.min.css', 'sha384-Xqcy5ttufkC3rBa8EdiAyA1VgOGrmel2Y+wxm4K3kI3fcjTWlDWrlnxyD6hOi3PF', '#4e5d6c', '#df691a', True),
+	'united': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/united/bootstrap.min.css', 'sha384-pVJelSCJ58Og1XDc2E95RVYHZDPb9AVyXsI8NoVpB2xmtxoZKJePbMfE4mlXw7BJ', '#e95420', '#772953', False),
+	'yeti': Theme('https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/yeti/bootstrap.min.css', 'sha384-HzUaiJdCTIY/RL2vDPRGdEQHHahjzwoJJzGUkYjHVzTwXFQ2QN/nVgX7tzoMW3Ov', '#333333', '#008cba', False)
 }
 
 def HtmlIndenter(stream):
@@ -114,6 +114,7 @@ def render_page(environ, writer, code=200, headers=[], title=configuration.name,
 	h.line('<meta http-equiv="X-UA-Compatible" content="IE=edge">')
 	h.line('<meta name="referrer" content="same-origin">')
 	h.line('<meta name="viewport" content="width=device-width, initial-scale=1">')
+	h.line('<meta name="theme-color" content="{0}">', theme.navbar2 if configuration.theme_inverse_navbar else theme.navbar)
 	h.line('<title>{0}</title>', title)
 	h.line('<link href="{0}" rel="stylesheet" integrity="{1}" crossorigin="anonymous">', theme.url, theme.sri)
 	if link_cb:
