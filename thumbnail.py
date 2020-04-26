@@ -33,7 +33,7 @@ assert(isinstance(configuration.thumbnail_filename_salt, bytes))
 assert(isinstance(configuration.thumbnail_animated_framecount, int))
 assert(isinstance(configuration.thumbnail_animated_framerate, int) or isinstance(configuration.thumbnail_animated_framerate, float))
 
-# If this is changed, hardcoded sizes in static/archive.css and static/*.svg must also be updated
+# If this is changed, hardcoded sizes in static/gallery.css and static/*.svg must also be updated
 thumbnail_size = 128
 
 thumbnail_filter = 'format=rgb24,scale=iw*min({0}/iw\,{0}/ih):ih*min({0}/iw\,{0}/ih)'

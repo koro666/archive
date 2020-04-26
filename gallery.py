@@ -331,7 +331,7 @@ def subhandler_html(environ, cookies, writer, mount_path, fs_path, name, is_edit
 	def links(h):
 		if not list_mode:
 			h.line('<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.swipebox/1.4.4/css/swipebox.min.css" rel="stylesheet" integrity="sha256-5KRlt3ls3xVyu0Fv7M6hvDH0wCDqHraymjiBtOAhZZU=" crossorigin="anonymous">')
-		h.line('<link href="{0}archive.css" rel="stylesheet">', configuration.static_prefix)
+		h.line('<link href="{0}gallery.css" rel="stylesheet">', configuration.static_prefix)
 		h.begin('<style>')
 		if not list_mode:
 			if theme_is_dark:
@@ -594,7 +594,7 @@ def subhandler_html(environ, cookies, writer, mount_path, fs_path, name, is_edit
 		h.line('const sort_mode = \'{0}\';', 'desc' if sort_info[1] else 'asc')
 		#h.line('const mixed = {0};', str(sort_info[1]).lower())
 		h.end('</script>')
-		h.line('<script src="{0}archive.js"></script>', configuration.static_prefix)
+		h.line('<script src="{0}gallery.js"></script>', configuration.static_prefix)
 
 	return page.render_page(
 		environ,
