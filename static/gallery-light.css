@@ -1,0 +1,15 @@
+div.archive_thumbnail
+{
+	background-image: url("background-light.svg");
+}
+
+div.archive_thumbnail:hover
+{
+	filter: brightness(90%);
+}
+
+div.archive_name
+{
+	color: black;
+	text-shadow: 0px 0px 4px white;
+}
