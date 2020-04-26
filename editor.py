@@ -98,6 +98,11 @@ def fetch_update_ids(ids, delay=0, download=None):
 						'mount_path': in_mount_path
 					})
 
+	def get_sort_key(id):
+		mount_path = id.get('mount_path', ('', ''))
+		return (mount_path[0].lower(), mount_path[1].lower(), id['id'].lower())
+
+	result.sort(key=get_sort_key)
 	return result
 
 def handler(environ, writer, parameter):
