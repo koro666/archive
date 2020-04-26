@@ -215,13 +215,41 @@ def handler(environ, writer, parameter):
 		h.end('</select>')
 		h.end('</div>')
 
+		if ids:
+			h.begin('<div class="form-group hidden">')
+			h.line('<textarea class="form-control" id="buffer" rows="4" readonly></textarea>')
+			h.end('</div>')
+
 		h.line('<button type="submit" class="btn btn-default">Update</button>')
+		if ids:
+			h.line('<button type="button" id="copy" class="btn btn-default">Copy</button>')
 
 		h.end('</form>')
+
+	def script(h):
+		h.begin('<script>')
+		h.line('$(document).ready(function()')
+		h.begin('{{')
+		h.line('$(\'#copy\').click(function(e)')
+		h.begin('{{')
+		h.line('let buffer = $(\'#buffer\');')
+		h.line('let parent = buffer.parent();')
+		h.line('buffer.val(\'\');')
+		h.line('$(\'input[name=ids]:checked\').next(\'a\').each(function(i, o) {{ buffer.val(function(i, text) {{ return text + o.href + \'\\n\'; }}); }});')
+		h.line('parent.removeClass(\'hidden\');')
+		h.line('buffer.select();')
+		h.line('document.execCommand(\'copy\');')
+		h.line('parent.addClass(\'hidden\');')
+		h.line('alert(\'Links were copied to the clipboard.\');')
+		h.line('e.preventDefault();')
+		h.end('}});')
+		h.end('}});')
+		h.end('</script>')
 
 	return page.render_page(
 		environ,
 		writer,
 		headers = [page.make_nocache_header()],
 		title = 'Link Editor',
-		content_cb = contents)
+		content_cb = contents,
+		script_cb = script if ids else None)
