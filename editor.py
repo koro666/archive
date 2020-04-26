@@ -227,24 +227,7 @@ def handler(environ, writer, parameter):
 		h.end('</form>')
 
 	def script(h):
-		h.begin('<script>')
-		h.line('$(document).ready(function()')
-		h.begin('{{')
-		h.line('$(\'#copy\').click(function(e)')
-		h.begin('{{')
-		h.line('let buffer = $(\'#buffer\');')
-		h.line('let parent = buffer.parent();')
-		h.line('buffer.val(\'\');')
-		h.line('$(\'input[name=ids]:checked\').next(\'a\').each(function(i, o) {{ buffer.val(function(i, text) {{ return text + o.href + \'\\n\'; }}); }});')
-		h.line('parent.removeClass(\'hidden\');')
-		h.line('buffer.select();')
-		h.line('document.execCommand(\'copy\');')
-		h.line('parent.addClass(\'hidden\');')
-		h.line('alert(\'Links were copied to the clipboard.\');')
-		h.line('e.preventDefault();')
-		h.end('}});')
-		h.end('}});')
-		h.end('</script>')
+		h.line('<script src="{0}editor.js"></script>', configuration.static_prefix)
 
 	return page.render_page(
 		environ,
