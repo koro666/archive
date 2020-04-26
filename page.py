@@ -151,6 +151,14 @@ def render_page(environ, writer, code=200, headers=[], title=configuration.name,
 	return (code, [('Content-Type', 'text/html; charset=utf-8')] + headers)
 
 def render_error_page(environ, writer, code, message):
-	# TODO: Better error page
-	writer.write(message)
-	return (code, [('Content-Type', 'text/plain; charset=utf-8')])
+	h = HtmlIndenter(writer)
+	h.line('<!doctype html>')
+	h.begin('<html lang="en">')
+	h.begin('<head>')
+	h.line('<meta name="viewport" content="width=device-width, initial-scale=1">')
+	h.line('<style>@media (max-width: 767px) {{ body {{ text-align: center; }} }} </style>')
+	h.end('</head>')
+	h.line('<body>{0}</body>', message)
+	h.end('</html>')
+
+	return (code, [('Content-Type', 'text/html; charset=utf-8')])
