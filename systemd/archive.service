@@ -1,0 +1,17 @@
+[Unit]
+Description=Archive Web Directory Indexer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=exec
+User=archive
+ExecStart=/opt/archive/server.py
+
+ProtectSystem=full
+PrivateTmp=true
+PrivateNetwork=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

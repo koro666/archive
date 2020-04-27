@@ -19,13 +19,8 @@ import randomid
 import page
 
 nice_binary = '/usr/bin/nice'
-
-if sys.platform.startswith('freebsd') or sys.platform.startswith('openbsd'):
-	ffprobe_binary = '/usr/local/bin/ffprobe'
-	ffmpeg_binary = '/usr/local/bin/ffmpeg'
-else:
-	ffprobe_binary = '/usr/bin/ffprobe'
-	ffmpeg_binary = '/usr/bin/ffmpeg'
+ffprobe_binary = '/usr/bin/ffprobe'
+ffmpeg_binary = '/usr/bin/ffmpeg'
 
 assert(isinstance(configuration.thumbnail_nice, int))
 assert(isinstance(configuration.thumbnail_concurrent, int))

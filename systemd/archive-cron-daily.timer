@@ -1,0 +1,9 @@
+[Unit]
+Description=Archive Daily Cleanup Timer
+
+[Timer]
+OnCalendar=*-*-* 6:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

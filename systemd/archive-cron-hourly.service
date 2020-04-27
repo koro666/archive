@@ -1,0 +1,12 @@
+[Unit]
+Description=Archive Hourly Cleanup
+
+[Service]
+Type=oneshot
+User=archive
+ExecStart=/opt/archive/cron.py hourly
+
+ProtectSystem=full
+PrivateTmp=true
+PrivateNetwork=true
+NoNewPrivileges=true

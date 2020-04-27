@@ -27,13 +27,12 @@ It also contains an interface to inspect and extend the lifetime of the generate
 Requirements
 ------------
 
-- POSIX operating system (tested on Linux and FreeBSD)
+- Linux
 - Python 3.8
-- Python's `sqlite` module
 - Nginx
 - FFmpeg
 
-FreeBSD packages: `python37 py37-sqlite3 nginx ffmpeg`.
+Arch Linux packages: `python nginx ffmpeg`
 
 How to install
 --------------
@@ -42,11 +41,10 @@ How to install
 - Edit `configuration.py` to your liking (see [documentation](documentation/configuration.md));
 - Add and commit your changes so you can just `git pull --rebase` later;
 - Run `nginx.py` to generate an example Nginx configuration;
-- Set up `server.py` to be run as a daemon: [Linux](https://www.freedesktop.org/software/systemd/man/systemd.service.html), [FreeBSD](https://www.freebsd.org/doc/en/books/porters-handbook/rc-scripts.html) [(advanced)](https://www.freebsd.org/doc/en_US.ISO8859-1/articles/rc-scripting/);
 - Either directly use the generated `nginx.conf`, or use it as an inspiration;
-- Add `cron.py hourly` in the server user's `crontab` as an hourly job;
-- Add `cron.py daily` in the server user's `crontab` as a daily job;
-- Start the server and (re-)start Nginx.
+- Copy all unit files from the `systemd` directory to `/etc/systemd/system`, editing them as needed;
+- Enable the `archive.service`, `archive-cron-hourly.timer` and `archive-cron-daily.timer` units;
+- Start the service and (re-)start Nginx.
 
 How to use
 ----------

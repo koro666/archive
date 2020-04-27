@@ -1,0 +1,12 @@
+[Unit]
+Description=Archive Daily Cleanup
+
+[Service]
+Type=oneshot
+User=archive
+ExecStart=/opt/archive/cron.py daily
+
+ProtectSystem=full
+PrivateTmp=true
+PrivateNetwork=true
+NoNewPrivileges=true
