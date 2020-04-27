@@ -39,8 +39,6 @@ thumbnail_size = 128
 thumbnail_filter = 'format=rgb24,scale=iw*min({0}/iw\,{0}/ih):ih*min({0}/iw\,{0}/ih)'
 thumbnail_semaphore = threading.Semaphore(configuration.thumbnail_concurrent)
 
-null_fd = os.open(os.devnull, os.O_RDWR)
-
 def id_scale_from_parameter_unvalidated(parameter):
 	split = parameter.split('@', 1)
 	if len(split) == 1:
@@ -77,7 +75,7 @@ def probe_duration(path):
 	argv.extend([ffprobe_binary, '-v', 'quiet', '-print_format', 'json', '-show_format', '-i', path])
 
 	with tempfile.TemporaryFile(suffix='.json') as fp:
-		subprocess.check_call(argv, stdin=null_fd, stdout=fp, stderr=null_fd)
+		subprocess.check_call(argv, stdin=subprocess.DEVNULL, stdout=fp, stderr=subprocess.DEVNULL)
 
 		fp.seek(0)
 		json_data = json.load(fp)
@@ -91,7 +89,7 @@ def convert_media_to_static(in_path, out_path, scale, duration):
 		argv.extend(['-ss', str(duration / 3.0)])
 	argv.extend(['-i', in_path, '-y', '-vf', thumbnail_filter.format(thumbnail_size * scale),  '-vframes', '1', '-vcodec', 'mjpeg', '-an', out_path])
 
-	subprocess.check_call(argv, stdin=null_fd, stdout=null_fd, stderr=null_fd)
+	subprocess.check_call(argv, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 def convert_media_to_animated(in_path, out_path, scale, duration):
 	if not duration:
@@ -109,7 +107,7 @@ def convert_media_to_animated(in_path, out_path, scale, duration):
 			argv = make_nice_argv()
 			argv.extend([ffmpeg_binary, '-ss', str(frame_offset), '-i', in_path, '-y', '-vf', thumbnail_filter.format(thumbnail_size * scale), '-vframes', '1', '-vcodec', 'png', '-an', frame_path])
 
-			frame_processes.append(subprocess.Popen(argv, stdin=null_fd, stdout=null_fd, stderr=null_fd))
+			frame_processes.append(subprocess.Popen(argv, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL))
 
 		failed = False
 		for frame_process in frame_processes:
@@ -127,10 +125,10 @@ def convert_media_to_animated(in_path, out_path, scale, duration):
 		argv_prefix.extend([ffmpeg_binary, '-f', 'image2', '-framerate', str(configuration.thumbnail_animated_framerate), '-i', os.path.join(temporary_directory, 'frame%d.png')])
 
 		argv = argv_prefix + ['-y', '-vf', 'palettegen', palette_file]
-		subprocess.check_call(argv, stdin=null_fd, stdout=null_fd, stderr=null_fd)
+		subprocess.check_call(argv, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 		argv = argv_prefix + ['-i', palette_file, '-y', '-lavfi', 'paletteuse', out_path]
-		subprocess.check_call(argv, stdin=null_fd, stdout=null_fd, stderr=null_fd)
+		subprocess.check_call(argv, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 	finally:
 		if temporary_directory:
 			shutil.rmtree(temporary_directory)
