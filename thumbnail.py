@@ -36,7 +36,7 @@ assert(isinstance(configuration.thumbnail_animated_framerate, int) or isinstance
 # If this is changed, hardcoded sizes in static/gallery.css and static/*.svg must also be updated
 thumbnail_size = 128
 
-thumbnail_filter = 'format=rgb24,scale=iw*min({0}/iw\,{0}/ih):ih*min({0}/iw\,{0}/ih)'
+thumbnail_filter = 'format=rgb24,scale=iw*min({0}/iw\\,{0}/ih):ih*min({0}/iw\\,{0}/ih)'
 thumbnail_semaphore = threading.Semaphore(configuration.thumbnail_concurrent)
 
 def id_scale_from_parameter_unvalidated(parameter):
