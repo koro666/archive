@@ -192,9 +192,7 @@ def handler(environ, writer, parameter):
 		return make_thumbnail_error(1, 'invalid-scale')
 
 	with contextlib.closing(database.open_database()) as db:
-		csr = db.cursor()
-		csr.execute('SELECT mount, path FROM ids WHERE id = ? AND expires > ?', (id, int(time.time())))
-		result = csr.fetchone()
+		result = db.execute('SELECT mount, path FROM ids WHERE id = ? AND expires > ?', (id, int(time.time()))).fetchone()
 
 	if not result:
 		return make_thumbnail_error(scale, 'expired-id')

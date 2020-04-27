@@ -16,11 +16,9 @@ def handler(environ, writer, parameter):
 		with db:
 			values = (parameter, int(time.time()))
 
-			csr = db.cursor()
-			csr.execute('UPDATE ids SET hits = hits + 1 WHERE id = ? AND expires > ?', values)
+			csr = db.execute('UPDATE ids SET hits = hits + 1 WHERE id = ? AND expires > ?', values)
 			if csr.rowcount:
-				csr = db.cursor()
-				csr.execute('SELECT expires, download, mount, path FROM ids WHERE id = ? AND expires > ?', values)
+				csr = db.execute('SELECT expires, download, mount, path FROM ids WHERE id = ? AND expires > ?', values)
 				result = csr.fetchone()
 			else:
 				result = None

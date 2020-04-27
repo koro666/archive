@@ -47,25 +47,19 @@ state_key = 'rid_state'
 del generator
 
 def peek_state(db):
-	csr = db.cursor()
-	csr.execute('SELECT value FROM state WHERE key = ?', (state_key,))
-	row = csr.fetchone()
+	row = db.execute('SELECT value FROM state WHERE key = ?', (state_key,)).fetchone()
 	return row[0] if row else 0
 
 def get_state_range_unlocked(db, count):
 	if not count:
 		return []
 
-	csr = db.cursor()
-	csr.execute('UPDATE state SET value = value + ? WHERE key = ?', (count, state_key))
+	csr = db.execute('UPDATE state SET value = value + ? WHERE key = ?', (count, state_key))
 
 	if csr.rowcount:
-		csr = db.cursor()
-		csr.execute('SELECT value FROM state WHERE key = ?', (state_key,))
-		last = csr.fetchone()[0]
+		last = db.execute('SELECT value FROM state WHERE key = ?', (state_key,)).fetchone()[0]
 	else:
-		csr = db.cursor()
-		csr.execute('INSERT INTO state (key, value) VALUES(?, ?)', (state_key, count))
+		db.execute('INSERT INTO state (key, value) VALUES(?, ?)', (state_key, count))
 		last = count
 
 	return range(last - count, last)

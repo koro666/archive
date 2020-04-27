@@ -59,9 +59,7 @@ def fetch_update_ids(ids, delay=0, download=None):
 				if not randomid.validate_id(id):
 					continue
 
-				csr = db.cursor()
-				csr.execute('SELECT expires, download, hits, mount, path FROM ids WHERE id = ?', (id,))
-				entry = csr.fetchone()
+				entry = db.execute('SELECT expires, download, hits, mount, path FROM ids WHERE id = ?', (id,)).fetchone()
 
 				if not entry:
 					result.append({
